@@ -1,4 +1,4 @@
 # Projeto-PetShop-Unifacol
  Repositório feito para o projeto de PetShop da cadeira de programação III da faculdade.
 
- Desenvolvedores: Gustavo Andrade, Alef, Luan, Armando e carlos.
+ Desenvolvedores: Gustavo Andrade, Alef Antônio, Luan, Armando e carlos.
