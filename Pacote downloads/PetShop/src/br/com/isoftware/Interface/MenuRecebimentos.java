@@ -80,7 +80,7 @@ public class MenuRecebimentos extends javax.swing.JFrame {
         jPanel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
 
         btNovo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/JASoftware/Imagens/Novoprod_1.png"))); // NOI18N
+        btNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/new.png"))); // NOI18N
         btNovo.setText("Novo");
         btNovo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,7 +89,7 @@ public class MenuRecebimentos extends javax.swing.JFrame {
         });
 
         btSalvar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/JASoftware/Imagens/Salvarprod_1.png"))); // NOI18N
+        btSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/save.png"))); // NOI18N
         btSalvar.setText("Salvar");
         btSalvar.setEnabled(false);
         btSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -99,7 +99,7 @@ public class MenuRecebimentos extends javax.swing.JFrame {
         });
 
         btAtualisar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btAtualisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/JASoftware/Imagens/Atualisarprod_1.png"))); // NOI18N
+        btAtualisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/atualizar.png"))); // NOI18N
         btAtualisar.setText("Atualisar");
         btAtualisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -108,7 +108,7 @@ public class MenuRecebimentos extends javax.swing.JFrame {
         });
 
         btExcluir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/JASoftware/Imagens/Excluirprod_1.png"))); // NOI18N
+        btExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/excluir.png"))); // NOI18N
         btExcluir.setText("Excluir");
         btExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -117,7 +117,7 @@ public class MenuRecebimentos extends javax.swing.JFrame {
         });
 
         btCancelar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/JASoftware/Imagens/Cancelar.png"))); // NOI18N
+        btCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/cancelar1.png"))); // NOI18N
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,7 +132,7 @@ public class MenuRecebimentos extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tbDespesas);
 
         btPesquisar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/JASoftware/Imagens/pesquisar.png"))); // NOI18N
+        btPesquisar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/pesquisar1.png"))); // NOI18N
         btPesquisar.setText("Pesquisar");
         btPesquisar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

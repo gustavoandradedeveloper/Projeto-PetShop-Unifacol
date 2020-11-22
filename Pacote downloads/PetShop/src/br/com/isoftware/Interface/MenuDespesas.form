@@ -344,7 +344,7 @@
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/br/com/JASoftware/Imagens/Novoprod_1.png"/>
+              <Image iconType="3" name="/br/com/isoftware/Imagens/new.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Novo"/>
           </Properties>
@@ -358,7 +358,7 @@
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/br/com/JASoftware/Imagens/Salvarprod_1.png"/>
+              <Image iconType="3" name="/br/com/isoftware/Imagens/save.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Salvar"/>
             <Property name="enabled" type="boolean" value="false"/>
@@ -373,7 +373,7 @@
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/br/com/JASoftware/Imagens/Atualisarprod_1.png"/>
+              <Image iconType="3" name="/br/com/isoftware/Imagens/atualizar.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Atualisar"/>
           </Properties>
@@ -387,7 +387,7 @@
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/br/com/JASoftware/Imagens/Excluirprod_1.png"/>
+              <Image iconType="3" name="/br/com/isoftware/Imagens/excluir.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Excluir"/>
           </Properties>
@@ -401,7 +401,7 @@
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/br/com/JASoftware/Imagens/Cancelar.png"/>
+              <Image iconType="3" name="/br/com/isoftware/Imagens/cancelar1.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Cancelar"/>
           </Properties>
@@ -452,7 +452,7 @@
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/br/com/JASoftware/Imagens/pesquisar.png"/>
+              <Image iconType="3" name="/br/com/isoftware/Imagens/pesquisar1.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Pesquisar"/>
           </Properties>

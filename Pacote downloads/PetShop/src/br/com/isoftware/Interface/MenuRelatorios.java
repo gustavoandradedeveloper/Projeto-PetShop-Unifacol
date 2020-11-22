@@ -50,6 +50,7 @@ public class MenuRelatorios extends javax.swing.JFrame {
         lbTitulo.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/relatorio.png"))); // NOI18N
         jButton1.setText("Gerar Relatorio");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,54 +141,21 @@ public class MenuRelatorios extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
      public void retatorioVendas(){   
-       
-         if(Tipo == 1){
             
-              try {
-              
-                     HashMap parametro = new HashMap();
-                     parametro.put("Datainicio", new java.sql.Date(Datainicio.getDate().getTime()));
-                     parametro.put("Datafim", new java.sql.Date(Datafinal.getDate().getTime()));
-                     JasperPrint jp = JasperFillManager.fillReport("../JASoftware/Jasper/VendasAvista.jasper", parametro, mysql.conectar());             
-                     JasperExportManager.exportReportToPdfFile(jp, "C:/Users/Armando/Desktop/Vendas Avista.pdf");  
-                     JasperViewer jv = new JasperViewer(jp,false); 
-                     jv.setVisible(true);
-                     jv.setTitle(Titulo);
-                    } catch (Exception ex){
-                               ex.printStackTrace();
-                              }
-        
-            }else if(Tipo == 2){
-                     
-                      try {              
-                              HashMap parametro = new HashMap();
-                              parametro.put("Datainicio", new java.sql.Date(Datainicio.getDate().getTime()));
-                              parametro.put("Datafim", new java.sql.Date(Datafinal.getDate().getTime()));
-                              JasperPrint jp = JasperFillManager.fillReport("../JASoftware/Jasper/VendasAprazo.jasper", parametro, mysql.conectar());             
-                              JasperExportManager.exportReportToPdfFile(jp, "C:/Users/Armando/Desktop/Vendas Aprazo.pdf");  
-                              JasperViewer jv = new JasperViewer(jp,false); 
-                              jv.setVisible(true);
-                              jv.setTitle(Titulo);
-                             } catch (Exception ex) {
-                                         ex.printStackTrace();
-                                       }
-                         }else{
-                                try {              
-                                        HashMap parametro = new HashMap();
-                                        parametro.put("Datainicio", new java.sql.Date(Datainicio.getDate().getTime()));
-                                        parametro.put("Datafim", new java.sql.Date(Datafinal.getDate().getTime()));
-                                        JasperPrint jp = JasperFillManager.fillReport("../JASoftware/Jasper/VendasLanche.jasper", parametro, mysql.conectar());             
-                                        JasperExportManager.exportReportToPdfFile(jp, "C:/Users/Armando/Desktop/Vendas Lanches.pdf");  
-                                        JasperViewer jv = new JasperViewer(jp,false); 
-                                        jv.setVisible(true);
-                                        jv.setTitle(Titulo);
-                                       } catch (Exception ex) {
-                                                  ex.printStackTrace();
-                                                 }
-                                  }
-       
-           
-     
+        try {
+
+               HashMap parametro = new HashMap();
+               parametro.put("Datainicio", new java.sql.Date(Datainicio.getDate().getTime()));
+               parametro.put("Datafim", new java.sql.Date(Datafinal.getDate().getTime()));
+               JasperPrint jp = JasperFillManager.fillReport("./Jasper/Vendas.jasper", parametro, mysql.conectar());             
+               JasperExportManager.exportReportToPdfFile(jp, "./Jasper/Relatórios/Vendas.pdf");  
+               JasperViewer jv = new JasperViewer(jp,false); 
+               jv.setVisible(true);
+               jv.setTitle(Titulo);
+              } catch (Exception ex){
+                         ex.printStackTrace();
+                        }
+        mysql.desconectar();
     } 
     
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

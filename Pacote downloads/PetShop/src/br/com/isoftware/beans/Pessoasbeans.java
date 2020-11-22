@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class Pessoasbeans {
  
-     
+     private Integer ClientePK;
      private String CNPJ;
      private String CPF;
      private String Funcao;
@@ -25,6 +25,15 @@ public class Pessoasbeans {
      private String Fone;
      private String DD;  
 
+     
+    public Integer getClientePK() {
+        return ClientePK;
+    }
+
+    public void setClientePK(Integer ClientePK) {
+        this.ClientePK = ClientePK;
+    }
+     
     public String getNome() {
         return Nome;
     }

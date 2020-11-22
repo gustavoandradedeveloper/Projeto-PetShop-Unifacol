@@ -1,7 +1,5 @@
 package br.com.isoftware.Interface;
 
-
-
 import br.com.isoftware.Calendario.calendario;
 import br.com.isoftware.beans.Pessoasbeans;
 import br.com.isoftware.beans.Produtosbeans;
@@ -32,13 +30,16 @@ public class MenuVendas extends javax.swing.JFrame {
    ArrayList<Produtosbeans> produtos = new ArrayList(); 
    ListSelectionModel lsmItens;
    ListSelectionModel lsmProdutos;
+   boolean selecao = true;
+   String quantidade;
    int linhas;
-   Double totalgaral = null,Valor = null;  
+   Double totalgaral = 0.0,Valor = null;  
    Double Valorpago = null;  
       
     public MenuVendas() {
         initComponents();
         listarProduto();
+        carregaCBs();
     }
   
     DefaultTableModel tmItens = new DefaultTableModel(null, new String[]{"Código", "Descricão","Quantidade"});
@@ -57,7 +58,7 @@ public class MenuVendas extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         btIncluir = new javax.swing.JButton();
-        btCancelar = new javax.swing.JButton();
+        btExcluir = new javax.swing.JButton();
         btFinalizar = new javax.swing.JButton();
         lbValortotal = new javax.swing.JLabel();
         lbTotal = new javax.swing.JLabel();
@@ -70,7 +71,10 @@ public class MenuVendas extends javax.swing.JFrame {
         txtQuantidade = new JFormattedTextField(NumberFormat.getInstance());
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        txtValorpago = new JFormattedTextField(NumberFormat.getInstance());
+        txtValorpago = new javax.swing.JTextField();
+        btCancelar = new javax.swing.JButton();
+        cbClientes = new javax.swing.JComboBox();
+        jLabel11 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         ATcadasClientes = new javax.swing.JMenuItem();
@@ -80,11 +84,6 @@ public class MenuVendas extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        miVendasavista = new javax.swing.JMenuItem();
-        miVendasaprazo = new javax.swing.JMenuItem();
-        miVendaslanches = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MENU VENDAS");
@@ -131,12 +130,12 @@ public class MenuVendas extends javax.swing.JFrame {
             }
         });
 
-        btCancelar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/Cancelarprod_1.png"))); // NOI18N
-        btCancelar.setText("Cancelar");
-        btCancelar.addActionListener(new java.awt.event.ActionListener() {
+        btExcluir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/excluir.png"))); // NOI18N
+        btExcluir.setText("Excluir");
+        btExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btCancelarActionPerformed(evt);
+                btExcluirActionPerformed(evt);
             }
         });
 
@@ -198,6 +197,21 @@ public class MenuVendas extends javax.swing.JFrame {
         txtValorpago.setBackground(new java.awt.Color(153, 153, 153));
         txtValorpago.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
+        btCancelar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        btCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/cancelar1.png"))); // NOI18N
+        btCancelar.setText("Cancelar");
+        btCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCancelarActionPerformed(evt);
+            }
+        });
+
+        cbClientes.setBackground(new java.awt.Color(153, 153, 153));
+        cbClientes.setEnabled(false);
+
+        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel11.setText("Cliente: ");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -209,12 +223,18 @@ public class MenuVendas extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLayeredPane2)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(cbClientes, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                        .addGap(46, 46, 46)
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                            .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel7)
@@ -231,6 +251,8 @@ public class MenuVendas extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btFinalizar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -239,7 +261,6 @@ public class MenuVendas extends javax.swing.JFrame {
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(lbValortroco, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(7, 7, 7)
                                         .addComponent(lbTotal)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(lbValortotal, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -264,9 +285,13 @@ public class MenuVendas extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(8, 8, 8)
-                        .addComponent(jLabel9)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel11))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(cbClientes)
+                            .addComponent(txtQuantidade, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -280,7 +305,8 @@ public class MenuVendas extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btIncluir, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
                         .addComponent(btFinalizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lbValortotal, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -292,7 +318,7 @@ public class MenuVendas extends javax.swing.JFrame {
                 .addGap(36, 36, 36))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btCancelar, btFinalizar, btIncluir});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btExcluir, btFinalizar, btIncluir});
 
         jMenuBar1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
@@ -366,42 +392,6 @@ public class MenuVendas extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Relatorios");
-        jMenu3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        jMenu4.setText("Vendas");
-
-        miVendasavista.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.ALT_MASK));
-        miVendasavista.setText("Vendas Avista");
-        miVendasavista.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miVendasavistaActionPerformed(evt);
-            }
-        });
-        jMenu4.add(miVendasavista);
-
-        miVendasaprazo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.ALT_MASK));
-        miVendasaprazo.setText("Vendas Aprazo");
-        miVendasaprazo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miVendasaprazoActionPerformed(evt);
-            }
-        });
-        jMenu4.add(miVendasaprazo);
-
-        miVendaslanches.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.ALT_MASK));
-        miVendaslanches.setText("Vendas Lanches");
-        miVendaslanches.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miVendaslanchesActionPerformed(evt);
-            }
-        });
-        jMenu4.add(miVendaslanches);
-
-        jMenu3.add(jMenu4);
-
-        jMenuBar1.add(jMenu3);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -432,7 +422,7 @@ public class MenuVendas extends javax.swing.JFrame {
         String[] campos = new String[]{null, null, null, null};
 
         if (produtos.isEmpty()) {
-                JOptionPane.showMessageDialog(null, "NENHUM FUNCIONARIO ENCONTRADO!!!");
+                JOptionPane.showMessageDialog(null, "NENHUM PEDIDO ENCONTRADO!!!");
            }
            else {
 
@@ -498,6 +488,9 @@ public class MenuVendas extends javax.swing.JFrame {
   public void carregaCBs(){
   
       listObjCli = new Vendascontrol().listaCBClientes("%%");
+      for (Pessoasbeans listObjCli1 : listObjCli) {
+          cbClientes.addItem(listObjCli1.getNome());
+      }
   } 
   
        private void camposhabilitados() {
@@ -506,15 +499,24 @@ public class MenuVendas extends javax.swing.JFrame {
     }
      
     private void desabilitados() {
-
+        
+         while (tmItens.getRowCount() > 0) {
+                    tmItens.removeRow(0);
+                }
+        btFinalizar.setEnabled(false);
+        txtQuantidade.setText("");
+        txtValorpago.setText("");
+        lbValortroco.setText("");
+        lbValortotal.setText("");
     }
     
  
-     private String FormataPreco(Double numero) {                              
-       
+     private String FormataPreco(Double numero) {
+         
+       String str = String.format("%1.2f", numero);
+       numero = Double.valueOf(str.replace(",", "."));
        DecimalFormat df = new DecimalFormat("###,###,##0.00");  
        String valor = df.format(numero);
-       
        return valor;
      }    
       
@@ -536,29 +538,15 @@ public class MenuVendas extends javax.swing.JFrame {
     
     private void tbProdutosLinhaSelecionada(JTable tb) {      
          
-        if(testeQuantidade()){ 
-            String[] campos = new String[]{null, null, null};
-            if (tb.getSelectedRow() != -1) {
-
-                       tmItens.addRow(campos);
-                       tmItens.setValueAt(produtos.get(tb.getSelectedRow()).getCodigo(), linhas, 0);
-                       tmItens.setValueAt(produtos.get(tb.getSelectedRow()).getValor(), linhas, 1);
-                       tmItens.setValueAt(txtQuantidade.getText(), linhas, 2);                       
-                       txtQuantidade.setText("");
-                   } 
-                    else { 
-
-                           //limparcampos();
-                          }
-            linhas++;
-        }
+        
       }
     // int resposta = JOptionPane.showConfirmDialog(frame,"escolha um", "escolha dois", JOptionPane.YES_NO_OPTION);
     private boolean testeQuantidade() {
-         JFrame frame = new JFrame("Digite a quantidade:");
-         String m = JOptionPane.showInputDialog(frame, "Quantidade", "Menu Vendas:", JOptionPane.INFORMATION_MESSAGE); 
-         tbProdutos.clearSelection();
-       return false;
+        
+        JFrame frame = new JFrame("Digite a quantidade:");
+        quantidade = JOptionPane.showInputDialog(frame, "Quantidade", "Menu Vendas:", JOptionPane.INFORMATION_MESSAGE);        
+               
+        return testaValor(quantidade);
     }
     
     private boolean removerItens() {
@@ -575,7 +563,7 @@ public class MenuVendas extends javax.swing.JFrame {
     }
     
     private void tbItensLinhaSelecionada(JTable tb) {      
-       
+       /*
         if(removerItens()){
          if (tb.getSelectedRow() != -1) {
              
@@ -589,92 +577,60 @@ public class MenuVendas extends javax.swing.JFrame {
 
                        // limparcampos();
                        }
-        }
+        }*/
       }    
     
       public void incluiPedido(){ 
-       
-  // if(!txtQuantidade.getText().equals("")){
           
-        Integer Qtde = Integer.parseInt(String.valueOf(txtQuantidade.getText().replace(".", "")));       
-      /*    
-        if(Qtde > 0){              
+          if (tbProdutos.getSelectedRow() != -1) {
+                if(!txtQuantidade.getText().equals("")){
 
-            Vendasbeans ObjVendas = new Vendasbeans();
-           // Integer Qtdelinhas = tmVendas.getRowCount();       
-           // ObjVendas.setProdutoFK(produtos.get(cbProdutos.getSelectedIndex()).getCodigo());                  
-           // ObjVendas.setFuncionarioFK(listObjFunci.get(cbFuncionarios.getSelectedIndex()).getFuncionarioPK());
+                    Integer Qtde = Integer.parseInt(String.valueOf(txtQuantidade.getText().replace(".", "")));       
 
-            if(rbPudim.isSelected() == true ){
-
-                if(cbClientes.getSelectedIndex() != 0){
-
-                   //ObjVendas.setClienteFK(listObjCli.get(cbClientes.getSelectedIndex()-1).getClientePK());
-
-                   }
-                   if(rbGrosso.isSelected() == true){
-
-                      // ObjVendas.setValor(Double.parseDouble(produtos.get(cbProdutos.getSelectedIndex()).getValorrevenda().replace(",","."))*Qtde);
-                    //   totalgaral = totalgaral + (Double.parseDouble(produtos.get(cbProdutos.getSelectedIndex()).getValorrevenda().replace(",","."))*Qtde);
-                       ObjVendas.setQuantidade(Qtde);                      
-                       listObjVendas.add(ObjVendas);
-                       String[] campos = new String[]{null, null,null,null,null};
-                       tmItens.addRow(campos);
-                       tmItens.setValueAt(produtos.get(0).getCodigo(), 0, 0);
-                    //   tmVendas.setValueAt(produtos.get(cbProdutos.getSelectedIndex()).getPeso(), Qtdelinhas, 1);
-                     //  tmVendas.setValueAt(FormataPreco(Double.valueOf(produtos.get(cbProdutos.getSelectedIndex()).getValorrevenda().replace(",","."))), Qtdelinhas, 2); 
-                       tmItens.setValueAt(Qtde, 0, 3);
-                     //  tmVendas.setValueAt(FormataPreco((Double.valueOf((produtos.get(cbProdutos.getSelectedIndex()).getValorrevenda().replace(",",".")))*Qtde)), Qtdelinhas, 4);
-                       lbValortotal.setText(FormataPreco(totalgaral)); 
+                    if(Qtde > 0){
+                        
+                        Vendasbeans ObjVendas;
+                        ObjVendas = new Vendasbeans();
+                        ObjVendas.setValor(Double.parseDouble(produtos.get(tbProdutos.getSelectedRow()).getValor().replace(",","."))*Qtde);
+                        totalgaral = totalgaral + (Double.parseDouble(produtos.get(tbProdutos.getSelectedRow()).getValor().replace(",","."))*Qtde);
+                        ObjVendas.setQuantidade(Qtde);
+                        ObjVendas.setProdutoFK(produtos.get(tbProdutos.getSelectedRow()).getCodigo()); 
+                        listObjVendas.add(ObjVendas);
+                        
+                        String[] campos = new String[]{null, null,null};
+                        tmItens.addRow(campos);
+                        tmItens.setValueAt(produtos.get(tbProdutos.getSelectedRow()).getCodigo(), linhas, 0);
+                        tmItens.setValueAt(produtos.get(tbProdutos.getSelectedRow()).getDescricao(), linhas, 1);
+                        tmItens.setValueAt(txtQuantidade.getText(), linhas, 2);
+                        lbValortotal.setText(FormataPreco(totalgaral));
+                        cbClientes.setEnabled(true);
                         btFinalizar.setEnabled(true);
+                        tbProdutos.clearSelection();
+                        txtQuantidade.setText("");
+                        linhas++;
+                    }else{
+                           tbProdutos.clearSelection();
+                           JOptionPane.showMessageDialog(null,"QUANTIDADE NÃO É VALIDA !!!");
+                          }
 
-                      }else if(rbVarejo.isSelected() == true){
-                            ObjVendas.setValor(Double.parseDouble(produtos.get(cbProdutos.getSelectedIndex()).getValor().replace(",","."))*Qtde);
-                            totalgaral = totalgaral + (Double.parseDouble(produtos.get(cbProdutos.getSelectedIndex()).getValor().replace(",","."))*Qtde);
-                            ObjVendas.setQuantidade(Qtde); 
-                            listObjVendas.add(ObjVendas);
-                            String[] campos = new String[]{null, null,null,null,null};
-                            tmVendas.addRow(campos);
-                            tmVendas.setValueAt(produtos.get(cbProdutos.getSelectedIndex()).getCodigo(), Qtdelinhas, 0);
-                         //   tmVendas.setValueAt(produtos.get(cbProdutos.getSelectedIndex()).getPeso(), Qtdelinhas, 1);
-                            tmVendas.setValueAt(FormataPreco(Double.valueOf(produtos.get(cbProdutos.getSelectedIndex()).getValor().replace(",","."))), Qtdelinhas, 2); 
-                            tmVendas.setValueAt(Qtde, Qtdelinhas, 3);                          
-                            tmVendas.setValueAt(FormataPreco((Double.valueOf((produtos.get(cbProdutos.getSelectedIndex()).getValor().replace(",",".")))*Qtde)), Qtdelinhas, 4);
-                            lbValortotal.setText(FormataPreco(totalgaral));
-                            btFinalizar.setEnabled(true);
-                          }   
-              }else{
-  //                   ObjVendas.setValor(Double.parseDouble(produtos.get(cbProdutos.getSelectedIndex()).getPreco().replace(",","."))*Qtde);
-                //     totalgaral = totalgaral + (Double.parseDouble(produtos.get(cbProdutos.getSelectedIndex()).getPreco().replace(",","."))*Qtde);
-                     ObjVendas.setQuantidade(Qtde); 
-                     listObjVendas.add(ObjVendas);
-                     String[] campos = new String[]{null, null,null,null,null};
-                     tmItens.addRow(campos);
-                     tmItens.setValueAt(produtos.get(cbProdutos.getSelectedIndex()).getCodigo(), Qtdelinhas, 0);
-                     tmItens.setValueAt(produtos.get(cbProdutos.getSelectedIndex()).getDescricao(), Qtdelinhas, 1);
-               //      tmVendas.setValueAt(FormataPreco(Double.valueOf(produtos.get(cbProdutos.getSelectedIndex()).getPreco().replace(",","."))), Qtdelinhas, 2); 
-                     tmItens.setValueAt(Qtde, 0 , 3);
-  //                   tmVendas.setValueAt(FormataPreco((Double.valueOf((produtos.get(cbProdutos.getSelectedIndex()).getPreco().replace(",",".")))*Qtde)), Qtdelinhas, 4);
-                     lbValortotal.setText(FormataPreco(totalgaral));
-                     btFinalizar.setEnabled(true);
-                    }
-                  }else{
-
-                         JOptionPane.showMessageDialog(null,"QUANTIDADE NÃO É VALIDA !!!");
+               }else{
+                         tbProdutos.clearSelection();
+                         JOptionPane.showMessageDialog(null,"O CAMPO QUANTIDADE ESTA VAZIO !!!");
                         }
-            
-           }else{
-             
-                     JOptionPane.showMessageDialog(null,"O CAMPO QUANTIDADE ESTA VAZIO !!!");
-                    }
-           */         
-   }
+            }
+             else 
+                 {
+                        JOptionPane.showMessageDialog(this, "SELECIONE UM PRODUTO !!!");
+                 }
+          }
+          
     public void novoPedido(){
        
         if(btFinalizar.isEnabled() == false ){
           
             lbValortotal.setText("");
             lbValortroco.setText("");
+            btFinalizar.setEnabled(true);
             Valor = 0.0;
             Valor = 0.0;
             totalgaral = 0.0;
@@ -682,108 +638,43 @@ public class MenuVendas extends javax.swing.JFrame {
              while (tmItens.getRowCount() > 0) {              
                    tmItens.removeRow(0);                                
                   } 
-            }
+        }
    }
     
-    private void btIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btIncluirActionPerformed
-        novoPedido();
-        incluiPedido();
-        
-    }//GEN-LAST:event_btIncluirActionPerformed
-
      public void finalizarPedido(ArrayList<Vendasbeans> Pedidos){
-     /*
-     if(tmItens.getRowCount() > 0){               
-                
-         if(rbPudim.isSelected() == true){
-         
-             if(cbPagamento.getSelectedIndex() == 0){
-                
-                  if(testaValor(txtValorpago.getText())){
-                          
-                         Valorpago = Double.parseDouble(txtValorpago.getText().trim());                         
-                        
-                          if(Valorpago >= totalgaral){ 
-                              
-                                    int resposta = JOptionPane.showConfirmDialog(this,"DESEJA FINALISAR ESTE PEDIDO ?\n\n"+"VENDA DE PUDIM\n\n "
-                                           + "TOTAL DA COMPRA: "+FormataPreco(totalgaral)+"\n\nVALOR PAGO: "+FormataPreco(Valorpago),"Confirmação",JOptionPane.YES_NO_OPTION);  
-               
-                                    if(resposta == JOptionPane.YES_NO_OPTION){
-                                    
-                                          Vendascontrol venCon = new Vendascontrol(); 
-                                     //     venCon.cadastraPedidoAvista(Pedidos,totalgaral ); 
-                                          Valorpago =  (Valorpago  - totalgaral);                                           
-                                          lbValortroco.setText(String.valueOf(FormataPreco(Valorpago)));                                         
-                                          esvasialista();
-                                          carregaCBProdutos();
-                                          carregaCBs(); 
-                                          btFinalizar.setEnabled(false);
-                                          JOptionPane.showMessageDialog(null, "COMPRA REALISADA COM SUCESSO !!!"); 
-                                         }                                   
-                                      }else{
-                                              JOptionPane.showMessageDialog(null, "O VALOR PAGO É MENOR QUE A COMPRA !!!");
-                                              }
-                                    }
-                         }else{
-                                if(cbPagamento.getSelectedIndex() != 0 && cbClientes.getSelectedIndex() != 0){
-                                      
-                                    int resposta = JOptionPane.showConfirmDialog(this,"DESEJA FINALISAR ESTE PEDIDO ???\n\nVENDA DE PUDIM\n\nCLIENTE: "
-                                          +listObjCli.get(cbClientes.getSelectedIndex()-1).getNome()+"\n\nCOMPRA: A PRAZO \n\n"
-                                          + "TOTAL DA COMPRA: "+totalgaral,"Confirmação",JOptionPane.YES_NO_OPTION);  
-                                   
-                                    if(resposta == JOptionPane.YES_NO_OPTION){                                     
-                                       
-                                           Vendascontrol venCon = new Vendascontrol(); 
-                                     //      venCon.cadastraPedidoAprazo(Pedidos,totalgaral );    
-                                           esvasialista();
-                                           carregaCBProdutos();
-                                           carregaCBs();                                       
-                                           btFinalizar.setEnabled(false);
-                                          }
-                                        }else{
-                                               JOptionPane.showMessageDialog(null, "O TIPO DE PAGAMENTO NÃO É PERMITIDO !!!");
-                                               }                                
-                                      }           
-              
-             }else{   
-                    if(cbPagamento.getSelectedIndex() == 0 && rbLanches.isSelected() == true){
-                    
-                        if(testaValor(txtValorpago.getText())){
-                          
-                                Valorpago = Double.parseDouble(txtValorpago.getText().trim());
-                               
-                               if(Valorpago >= totalgaral){ 
-                                   int resposta = JOptionPane.showConfirmDialog(this,"DESEJA FINALISAR ESTE PEDIDO ?\n\n"+"VENDA DE LANCHES\n\n "
-                                           + "TOTAL: "+FormataPreco(totalgaral)+"\n\nVALOR PAGO: "+FormataPreco(Valorpago),"Confirmação",JOptionPane.YES_NO_OPTION);  
-               
-                                    if(resposta == JOptionPane.YES_NO_OPTION){
-                                    
-                                          Vendascontrol venCon = new Vendascontrol(); 
-                                //          venCon.cadastraPedido(Pedidos,totalgaral);  
-                                          Valorpago =  (Valorpago  - totalgaral);                                         
-                                          lbValortroco.setText(String.valueOf(FormataPreco(Valorpago)));                                      
-                                          btFinalizar.setEnabled(false); 
-                                          esvasialista();
-                                          carregaCBProdutos();
-                                          carregaCBs();                                        
-                                          JOptionPane.showMessageDialog(null, "COMPRA REALISADA COM SUCESSO !!!"); 
-                                         }                                   
-                                       }else{
-                                              JOptionPane.showMessageDialog(null, "O VALOR PAGO É MENOR QUE A COMPRA !!!");
-                                              }
-                                    }                
-                                 }else{
-                                          JOptionPane.showMessageDialog(null, "O TIPO DE PAGAMENTO NÃO É PERMITIDO !!!");
-                                         }        
-                        }
+     
+        if(tmItens.getRowCount() > 0){ 
 
-         }else{
-                 JOptionPane.showMessageDialog(null, "A LISTA DE PEDIDOS ESTA VAZIA !!!");
-                }
-    */
+            if(testaValor(txtValorpago.getText())){
+
+                Valorpago = Double.parseDouble(txtValorpago.getText().trim());                         
+
+                if(Valorpago >= totalgaral){ 
+
+                       int resposta = JOptionPane.showConfirmDialog(this,"DESEJA FINALISAR ESTE PEDIDO ?\n\n"+"VENDA DE PUDIM\n\n "
+                              + "TOTAL DA COMPRA: "+FormataPreco(totalgaral)+"\n\nVALOR PAGO: "+FormataPreco(Valorpago),"Confirmação",JOptionPane.YES_NO_OPTION);  
+
+                       if(resposta == JOptionPane.YES_NO_OPTION){
+
+                             Vendascontrol venCon = new Vendascontrol(); 
+                             venCon.cadastraPedidoAvista(Pedidos, listObjCli.get(cbClientes.getSelectedIndex()).getClientePK(),totalgaral); 
+                             Valorpago =  (Valorpago  - totalgaral);                                           
+                             lbValortroco.setText(String.valueOf(FormataPreco(Valorpago)));                                         
+                             esvasialista();
+                             btFinalizar.setEnabled(false);
+                             JOptionPane.showMessageDialog(null, "COMPRA REALISADA COM SUCESSO !!!");
+                             desabilitados();
+                        }                                   
+                 }else{
+                         JOptionPane.showMessageDialog(null, "O VALOR PAGO É MENOR QUE A COMPRA !!!");
+                         }
+            }
+        }else{
+                JOptionPane.showMessageDialog(null, "A LISTA DE PEDIDOS ESTA VAZIA !!!");
+               }    
    }
  
-     public Boolean testaValor(String digitos){
+    boolean testaValor(String digitos){
    
        if(!digitos.equals("")){
          
@@ -833,21 +724,22 @@ public class MenuVendas extends javax.swing.JFrame {
                     lbValortotal.setText(FormataPreco(totalgaral));
                     listObjVendas.remove(listObjVendas.get(tbItens.getSelectedRow())); 
                     tmItens.removeRow(tbItens.getSelectedRow());
-             
+                    linhas--;
                     if(listObjVendas.isEmpty()){  
                  
                         lbValortotal.setText("");
                         totalgaral = 0.0;
                         JOptionPane.showMessageDialog(null,"LISTA ESTA VAZIA ");                  
                         camposhabilitados();
+                        cbClientes.setEnabled(false);
+                        cbClientes.setSelectedIndex(0);
                         btFinalizar.setEnabled(false);
                        }            
                    }else{
                            JOptionPane.showMessageDialog(null,"TABELA ESTA VAZIA OU NENHUM ITEM FOI SELECIONADO !!!"); 
                           }
-                 }       
+            }       
     }
-    
     
      public void esvasialista(){ 
  
@@ -857,56 +749,11 @@ public class MenuVendas extends javax.swing.JFrame {
                    }   
                    camposhabilitados();
      }
-         
-    
-    private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
-          
-        while (tmItens.getRowCount() > 0) {              
-                   tmItens.removeRow(0);                                
-                  } 
-                  lbValortotal.setText("");
-                  esvasialista();
-                  carregaCBProdutos();
-                  carregaCBs(); 
-                  camposhabilitados();
-    }//GEN-LAST:event_btCancelarActionPerformed
-
-    public void carregaCBProdutos(){
-  /*
-       produtos = new Vendascontrol().listaProdutos(); 
-         
-       if(rbPudim.isSelected() == true){
-       
-           if(rbGrosso.isSelected() == true){    
-                
-                 for(int i = 0;i < produtos.size() ;i ++){                     
-                    
-                 //     cbProdutos.addItem("Peso : "+produtos.get(i).getPeso()+" * | * Valor Unitario : "+produtos.get(i).getValorrevenda());        
-                      }  
-                     
-                } else{    
-                
-                       for(int i = 0;i < produtos.size() ;i ++){                     
-                    
-                           // cbProdutos.addItem("Peso : "+produtos.get(i).getPeso()+" * | * Valor Unitario : "+produtos.get(i).getValor());        
-                           }  
-                         
-                       }
-       
-               }else if(rbLanches.isSelected() == true){
-       
-                         //    produtos = new Produtoscontrol().listaLanches();                
-                             cbProdutos.removeAllItems();
-                 
-                             for(int i = 0;i < produtos.size() ;i ++){                     
-                    
-                              //    cbProdutos.addItem(produtos.get(i).getDescricao()+" * | * R$: "+produtos.get(i).getPreco());        
-                                 }  
-                            }           
-      */       
-  } 
    
-  
+    private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
+          
+        excluiItem();
+    }//GEN-LAST:event_btExcluirActionPerformed
     
     calendario calendar;  
       
@@ -948,23 +795,23 @@ public class MenuVendas extends javax.swing.JFrame {
         visualisaClientes();
     }//GEN-LAST:event_ATcadasClientesActionPerformed
 
-    private void miVendasavistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVendasavistaActionPerformed
-        String args = "Relatorio de vendas Avista";
-        Relatorios.main(1 , args);
-        dispose();
-    }//GEN-LAST:event_miVendasavistaActionPerformed
+    private void btIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btIncluirActionPerformed
+        
+        incluiPedido();
+    }//GEN-LAST:event_btIncluirActionPerformed
 
-    private void miVendasaprazoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVendasaprazoActionPerformed
-        String args = "Relatorio de vendas Aprazo";
-        Relatorios.main(2 , args);
-        dispose();
-    }//GEN-LAST:event_miVendasaprazoActionPerformed
-
-    private void miVendaslanchesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVendaslanchesActionPerformed
-        String args ="Relatorio de vendas de Lanchas";
-        Relatorios.main(3 , args);
-        dispose();
-    }//GEN-LAST:event_miVendaslanchesActionPerformed
+    private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
+        
+        while (tmItens.getRowCount() > 0) {              
+                   tmItens.removeRow(0);                                
+                  } 
+                  lbValortotal.setText("");
+                  linhas = 0;
+                  cbClientes.setEnabled(true);
+                  btFinalizar.setEnabled(false);
+                  esvasialista();
+                  camposhabilitados();
+    }//GEN-LAST:event_btCancelarActionPerformed
 
     MenuRelatorios Relatorios; 
     
@@ -1009,10 +856,13 @@ public class MenuVendas extends javax.swing.JFrame {
     private javax.swing.JMenuItem ATcadasFuncionarios;
     private javax.swing.JMenuItem ATcadasProdutos;
     private javax.swing.JButton btCancelar;
+    private javax.swing.JButton btExcluir;
     private javax.swing.JButton btFinalizar;
     private javax.swing.JButton btIncluir;
+    private javax.swing.JComboBox cbClientes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
@@ -1020,8 +870,6 @@ public class MenuVendas extends javax.swing.JFrame {
     private javax.swing.JLayeredPane jLayeredPane2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
@@ -1033,9 +881,6 @@ public class MenuVendas extends javax.swing.JFrame {
     private javax.swing.JLabel lbTroco;
     private javax.swing.JLabel lbValortotal;
     private javax.swing.JLabel lbValortroco;
-    private javax.swing.JMenuItem miVendasaprazo;
-    private javax.swing.JMenuItem miVendasavista;
-    private javax.swing.JMenuItem miVendaslanches;
     private javax.swing.JTable tbItens;
     private javax.swing.JTable tbProdutos;
     private javax.swing.ButtonGroup tipoPreco;

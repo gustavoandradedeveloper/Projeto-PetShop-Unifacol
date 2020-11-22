@@ -21,15 +21,13 @@ public class Vendascontrol {
   ResultSet rs; 
   AcessoMysql mysql = new AcessoMysql();
     
-  String listaClientes = "SELECT * FROM PESSOA WHERE NOME LIKE ?";
+  String listaClientes = "SELECT * FROM CLIENTES WHERE NOME_CLIENTE LIKE ?";
   String listaFuncionarios = "SELECT * FROM FUNCIONARIOS WHERE NOME LIKE ?";  
-  String consultarProdutos = "SELECT * FROM PRODUTOS";  
+  String consultarProdutos = "SELECT * FROM PRODUTOS"; 
   
-  String cadastraVendas = "INSERT INTO VENDAS(TOTAL,DESCONTO,DATA,TIPOVENDA)VALUES(?,?,?,?)"; 
-  String cadastraVendasprazo = "INSERT INTO VENDAPRAZO(VENDAFK,CLIENTEFK,FUNCIONARIOFK)VALUES(?,?,?)";
+  String cadastraVendas = "INSERT INTO COMPRAS(VALOR_COMPRA, DT_COMPRA, CLIENTE_COMPRA)VALUES(?,?,?)";
+  String cadastraItensVendas = "INSERT INTO ITENS(QTD_ITEM, COMPRA_ITEM, PRODUTO_ITEM)VALUES(?,?,?)";
   
-  String cadastraItens = "INSERT INTO ITENS(QUANTIDADE,VENDASFK,PRODUTOSFK)VALUES(?,?,?)";
-  String cadastraPedido = "INSERT INTO PEDIDO(QUANTIDADE,VENDAFK,LANCHEFK)VALUES(?,?,?)";
   
   
   ArrayList<Produtosbeans> produtos;
@@ -83,8 +81,8 @@ public class Vendascontrol {
                while(rs.next()){
             
                      Clientes = new Pessoasbeans();   
-//                     Clientes.setClientePK(rs.getInt("ClientePK"));  
-                     Clientes.setNome(rs.getString("Nome")); 
+                     Clientes.setClientePK(rs.getInt("cod_cliente"));  
+                     Clientes.setNome(rs.getString("nome_cliente")); 
                      listObjForm.add(Clientes);
                  }
                    
@@ -119,113 +117,32 @@ public class Vendascontrol {
       return listObjFunci;       
    }          
   
-   public void cadastraPedidoAvista(ArrayList<Vendasbeans> Pedidos,Double Totalgeral){
+   public void cadastraPedidoAvista(ArrayList<Vendasbeans> Pedidos, int clientePK,Double Totalgeral){
     
         try {           
-          
-             Integer CodVendasPK = null;
-               pstm = mysql.conectar().prepareStatement(cadastraVendas,PreparedStatement.RETURN_GENERATED_KEYS);
-                  
-                  pstm.setDouble(1,Totalgeral);
-                  pstm.setDouble(2,0.0);
-                  pstm.setDate(3,CapturaData());
-                  pstm.setInt(4,1);
-                  pstm.executeUpdate();                 
-                  rs = pstm.getGeneratedKeys();
              
-                  while(rs.next()){
-                 
-                         CodVendasPK = rs.getInt(1);                        
-                        }
-            
+                Integer CodVendasPK = null;
+                pstm = mysql.conectar().prepareStatement(cadastraVendas, PreparedStatement.RETURN_GENERATED_KEYS);
+                //COD_COMPRA, VALOR_COMPRA, DT_COMPRA, CLIENTE_COMPRA  
+                pstm.setDouble(1, Totalgeral);
+                pstm.setDate(2, CapturaData());
+                pstm.setInt(3, clientePK);
+                pstm.executeUpdate();                 
+                rs = pstm.getGeneratedKeys();
+
+                while(rs.next()){
+
+                       CodVendasPK = rs.getInt(1);                        
+                      }
+           
+             //COD_ITEM, QTD_ITEM, COMPRA_ITEM, PRODUTO_ITEM
              for(int i = 0;i < Pedidos.size();i++){         
                  
-                        pstm = mysql.conectar().prepareStatement(cadastraItens);
-                        pstm.setInt(1,Pedidos.get(i).getQuantidade());
-                        pstm.setInt(2,CodVendasPK);
-                        pstm.setInt(3,Pedidos.get(i).getProdutoFK());                        
-                        pstm.executeUpdate();                 
-                       
-                        mysql.desconectar();   
-                  }
-            
-        } catch (Exception e) {
-                 e.printStackTrace();            
-        }
-     }
-   
-   
-    public void cadastraPedidoAprazo(ArrayList<Vendasbeans> Pedidos,Double Totalgeral){
-    
-        try {           
-          
-                 Integer CodVendasPK = null;
-                
-                  pstm = mysql.conectar().prepareStatement(cadastraVendas,PreparedStatement.RETURN_GENERATED_KEYS);
-                  
-                  pstm.setDouble(1,Totalgeral);
-                  pstm.setDouble(2,0.0);
-                  pstm.setDate(3,CapturaData());
-                  pstm.setInt(4,2);                  
-                  pstm.executeUpdate();                 
-                  rs = pstm.getGeneratedKeys();
-             
-                  while(rs.next()){
-                 
-                         CodVendasPK = rs.getInt(1);                        
-                        }
-            
-                        for(int i = 0;i < Pedidos.size();i++){         
-                 
-                             pstm = mysql.conectar().prepareStatement(cadastraItens);
-                             pstm.setInt(1,Pedidos.get(i).getQuantidade());
-                             pstm.setInt(2,CodVendasPK);
-                             pstm.setInt(3,Pedidos.get(i).getProdutoFK());                            
-                             pstm.executeUpdate();                 
-                       
-                             if(i <= 0){
-                            
-                                  pstm = mysql.conectar().prepareStatement(cadastraVendasprazo);
-                                  pstm.setInt(1,CodVendasPK);
-                                  pstm.setInt(2,Pedidos.get(i).getClienteFK());
-                                  pstm.setInt(3,Pedidos.get(i).getFuncionarioFK());                        
-                                  pstm.executeUpdate();                             
-                                 }
-                             }
-                             
-                             mysql.desconectar();                   
-            
-        } catch (Exception e) {
-                 e.printStackTrace();            
-        }
-     }   
-   
-   public void cadastraPedido(ArrayList<Vendasbeans> Pedidos,Double Totalgeral){
-    
-        try {           
-          
-             Integer CodVendasPK = null;
-               pstm = mysql.conectar().prepareStatement(cadastraVendas,PreparedStatement.RETURN_GENERATED_KEYS);
-                  
-                  pstm.setDouble(1,Totalgeral);
-                  pstm.setDouble(2,0.0);
-                  pstm.setDate(3,CapturaData());
-                  pstm.setInt(4,3);
-                  pstm.executeUpdate();                 
-                  rs = pstm.getGeneratedKeys();
-             
-                  while(rs.next()){
-                 
-                         CodVendasPK = rs.getInt(1);                        
-                        }
-            
-             for(int i = 0;i < Pedidos.size();i++){         
-                 
-                        pstm = mysql.conectar().prepareStatement(cadastraPedido);
-                        pstm.setInt(1,Pedidos.get(i).getQuantidade());
-                        pstm.setInt(2,CodVendasPK);
-                        pstm.setInt(3,Pedidos.get(i).getProdutoFK());                        
-                        pstm.executeUpdate();                 
+                        pstm = mysql.conectar().prepareStatement(cadastraItensVendas);
+                        pstm.setInt(1, Pedidos.get(i).getQuantidade());
+                        pstm.setInt(2, CodVendasPK);
+                        pstm.setInt(3, Pedidos.get(i).getProdutoFK());                        
+                        pstm.executeUpdate();               
                        
                         mysql.desconectar();   
                   }
@@ -241,8 +158,7 @@ public class Vendascontrol {
         SimpleDateFormat formatdate = new  SimpleDateFormat("yyyy-MM-dd");      
         Date date = Date.valueOf(formatdate.format(data));     
     
-   return date;
-  
+   return date;  
   }
      
 }
