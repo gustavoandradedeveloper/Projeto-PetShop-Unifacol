@@ -41,7 +41,7 @@ public class MenuFornecedor extends javax.swing.JFrame {
         TipoPessoa = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tbFuncionarios = new javax.swing.JTable();
+        tbFornecedores = new javax.swing.JTable();
         btNovo = new javax.swing.JButton();
         btSalvar = new javax.swing.JButton();
         btAtualisar = new javax.swing.JButton();
@@ -95,24 +95,24 @@ public class MenuFornecedor extends javax.swing.JFrame {
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jPanel1.setPreferredSize(new java.awt.Dimension(1100, 680));
 
-        tbFuncionarios.setBackground(new java.awt.Color(153, 153, 153));
-        tbFuncionarios.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        tbFuncionarios.setModel(tmFuncionaros);
-        tbFuncionarios.setRowHeight(30);
-        tbFuncionarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        lsmClientes = tbFuncionarios .getSelectionModel();
+        tbFornecedores.setBackground(new java.awt.Color(153, 153, 153));
+        tbFornecedores.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        tbFornecedores.setModel(tmFuncionaros);
+        tbFornecedores.setRowHeight(30);
+        tbFornecedores.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        lsmClientes = tbFornecedores .getSelectionModel();
         lsmClientes.addListSelectionListener(new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
 
                 if(! e.getValueIsAdjusting() ){
 
-                    tbFuncionarioLinhaSelecionada(tbFuncionarios);
+                    tbFuncionarioLinhaSelecionada(tbFornecedores);
 
                 }
             }
         });
-        jScrollPane1.setViewportView(tbFuncionarios);
+        jScrollPane1.setViewportView(tbFornecedores);
 
         btNovo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         btNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/novo.png"))); // NOI18N
@@ -551,7 +551,7 @@ public class MenuFornecedor extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(1116, 718));
@@ -664,7 +664,7 @@ public class MenuFornecedor extends javax.swing.JFrame {
     }//GEN-LAST:event_ATcadasProdutosActionPerformed
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        listaCliente();
+        listaFornecedor();
     }//GEN-LAST:event_btPesquisarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
@@ -679,13 +679,33 @@ public class MenuFornecedor extends javax.swing.JFrame {
         btNovo.setEnabled(true);
         btPesquisar.setEnabled(true);
         txtPesquisar.setEditable(true);
-        tbFuncionarios.setEnabled(true);
+        tbFornecedores.setEnabled(true);
         btSalvar.setEnabled(false);
         desabilitados();
     }//GEN-LAST:event_btCancelarActionPerformed
 
+    private void excluirFornecedor(int codigo){
+        
+        PessoasControl cliente = new PessoasControl();
+        if(cliente.excluirPessoa(codigo, 2)){
+            JOptionPane.showMessageDialog(this, "FORNECEDOR EXCLUIDO COM SUCESSO !!!");
+            listaFornecedor();
+            desabilitados();
+        }else{
+            JOptionPane.showMessageDialog(this, "FORNECEDOR NÃO EXCLUIDO !!!");
+        }
+    }
+    
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
+        if (tbFornecedores.getSelectedRow() != -1) {
 
+            int resposta = JOptionPane.showConfirmDialog(this,"DESEJA EXCLUIR ESTE FORNECEDOR?", "Confirmação", JOptionPane.YES_NO_OPTION);  
+            if(resposta == JOptionPane.YES_OPTION){
+                excluirFornecedor(listObjForm.get(tbFornecedores.getSelectedRow()).getFornecedorPK());
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "SELECIONE UM FORNECEDOR !!!");
+        }
     }//GEN-LAST:event_btExcluirActionPerformed
 
     private void btAtualisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualisarActionPerformed
@@ -693,7 +713,7 @@ public class MenuFornecedor extends javax.swing.JFrame {
         if (op == 0 || op == 2) {
             op = 2;
             salvar = 2;
-            AlterarFuncionario();
+            AlterarFornecedor();
         }
 
     }//GEN-LAST:event_btAtualisarActionPerformed
@@ -706,12 +726,12 @@ public class MenuFornecedor extends javax.swing.JFrame {
             op = 0;
             txtPesquisar.setEditable(true);
             btPesquisar.setEnabled(true);
-            tbFuncionarios.setEnabled(true);
+            tbFornecedores.setEnabled(true);
         }
         else if (salvar == 2) {
 
             atualisarFornecedores();
-            listaCliente();
+            listaFornecedor();
             limparcampos();
             op = 0;
         }
@@ -719,7 +739,7 @@ public class MenuFornecedor extends javax.swing.JFrame {
         btNovo.setEnabled(true);
         btPesquisar.setEnabled(true);
         txtPesquisar.setEditable(true);
-        tbFuncionarios.setEnabled(true);
+        tbFornecedores.setEnabled(true);
         btSalvar.setEnabled(false);
         desabilitados();
     }//GEN-LAST:event_btSalvarActionPerformed
@@ -736,8 +756,9 @@ public class MenuFornecedor extends javax.swing.JFrame {
             btAtualisar.setEnabled(false);
             btSalvar.setEnabled(true);
             btPesquisar.setEnabled(false);
-            tbFuncionarios.setEnabled(false);
-            novoCliente();
+            tbFornecedores.setEnabled(false);
+            btExcluir.setEnabled(false);
+            novoFornecedor();
         }
     }//GEN-LAST:event_btNovoActionPerformed
 
@@ -799,7 +820,7 @@ public class MenuFornecedor extends javax.swing.JFrame {
     }//GEN-LAST:event_miVendaslanchesActionPerformed
     
     MenuRelatorios Relatorios; 
-     private void novoCliente() {
+     private void novoFornecedor() {
               camposhabilitados();
               }
     
@@ -829,18 +850,18 @@ public class MenuFornecedor extends javax.swing.JFrame {
             ObjBeans.setUF(txtUF.getText().trim());
             ObjBeans.setFone(txtContato.getText().trim());
             ObjBeans.setDD(txtDD.getText().trim());
-           
-            PessoasControl forn = new PessoasControl();
-            forn.cadastroFornecedor(ObjBeans);
-            desabilitados();
-            limparcampos();
             
-            JOptionPane.showMessageDialog(this, "FUNCIONARIO CADASTRADO COM EXITO !!!");
-           }
-        
+            PessoasControl forn = new PessoasControl();
+            if(forn.cadastroFornecedor(ObjBeans)){
+                desabilitados();
+                limparcampos();
+                JOptionPane.showMessageDialog(this, "FORNECEDOR ATUALISADO SUCESSO !!!");
+            }else{
+                JOptionPane.showMessageDialog(this, "FORNECEDOR NÃO ATUALISADO !!!");
+            }
+        }
     }
-    
-    
+        
       private void atualisarFornecedores(){
 
         if (testarcampos()){          
@@ -858,41 +879,41 @@ public class MenuFornecedor extends javax.swing.JFrame {
             ObjBeans.setUF(txtUF.getText());
             ObjBeans.setDD(txtDD.getText());                  
             ObjBeans.setFone(txtContato.getText());
-            ObjBeans.setFornecedorPK(listObjForm.get(tbFuncionarios.getSelectedRow()).getFornecedorPK());
+            ObjBeans.setFornecedorPK(listObjForm.get(tbFornecedores.getSelectedRow()).getFornecedorPK());
             
             forn.atualisarFornecedores(ObjBeans);
            
             desabilitados();
             limparcampos();
-            JOptionPane.showMessageDialog(this, "FUNCIONARIO ATUALISADO COM EXITO !!!");
+            JOptionPane.showMessageDialog(this, "FORNECEDOR ATUALISADO COM SUCESSO !!!");
           }
       }
      
-     private void AlterarFuncionario() {
+     private void AlterarFornecedor() {
 
-        if (tbFuncionarios.getSelectedRow() != -1) {
+        if (tbFornecedores.getSelectedRow() != -1) {
             camposhabilitados();
             btNovo.setEnabled(false);
             btSalvar.setEnabled(true);           
             }
              else 
                  {
-                 JOptionPane.showMessageDialog(this, "SELECIONE UM FUNCIONARIO !!!");
+                 JOptionPane.showMessageDialog(this, "SELECIONE UM FORNECEDOR !!!");
                  }
           }
     
     
- private void listaCliente() {
+ private void listaFornecedor() {
 
         PessoasControl   forn = new PessoasControl();
 
-        listObjForm = forn.listarFornecedores("%" + txtPesquisar.getText().trim() + "%");
+        listObjForm = forn.listarFornecedores("%" + txtPesquisar.getText().trim() + "%", 0);
 
-        visualizarFuncionario(listObjForm);
+        visualizarFornecedor(listObjForm);
 
         }
        
-  private void visualizarFuncionario(ArrayList<Fornecedorbeans > Funcionario) {
+  private void visualizarFornecedor(ArrayList<Fornecedorbeans > Fornecedor) {
 
         while (tmFuncionaros.getRowCount() > 0) {
                 tmFuncionaros.removeRow(0);
@@ -900,20 +921,20 @@ public class MenuFornecedor extends javax.swing.JFrame {
 
         String[] campos = new String[]{null, null, null, null};
 
-        if (Funcionario.size() == 0) {
+        if (Fornecedor.size() == 0) {
             
             txtPesquisar.setText("");
-            JOptionPane.showMessageDialog(null, "NENHUM FUNCIONARIO ENCONTRADO !!!");
+            JOptionPane.showMessageDialog(null, "NENHUM FORNECEDOR ENCONTRADO !!!");
            }
            else {
 
-                for (int i = 0; i < Funcionario.size(); i++) {
+                for (int i = 0; i < Fornecedor.size(); i++) {
 
                       tmFuncionaros.addRow(campos);
-                      tmFuncionaros.setValueAt(Funcionario.get(i).getFornecedorPK(), i, 0);
-                      tmFuncionaros.setValueAt(Funcionario.get(i).getEmpresa(), i, 1);
-                      tmFuncionaros.setValueAt(Funcionario.get(i).getCNPJ(), i, 2);
-                      tmFuncionaros.setValueAt(Funcionario.get(i).getFone(), i, 3);
+                      tmFuncionaros.setValueAt(Fornecedor.get(i).getFornecedorPK(), i, 0);
+                      tmFuncionaros.setValueAt(Fornecedor.get(i).getEmpresa(), i, 1);
+                      tmFuncionaros.setValueAt(Fornecedor.get(i).getCNPJ(), i, 2);
+                      tmFuncionaros.setValueAt(Fornecedor.get(i).getFone(), i, 3);
                      }
 
                }
@@ -1022,7 +1043,7 @@ public class MenuFornecedor extends javax.swing.JFrame {
     private javax.swing.JMenuItem miVendasaprazo;
     private javax.swing.JMenuItem miVendasavista;
     private javax.swing.JMenuItem miVendaslanches;
-    private javax.swing.JTable tbFuncionarios;
+    private javax.swing.JTable tbFornecedores;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JFormattedTextField txtCNPJ;
     private javax.swing.JFormattedTextField txtCep;

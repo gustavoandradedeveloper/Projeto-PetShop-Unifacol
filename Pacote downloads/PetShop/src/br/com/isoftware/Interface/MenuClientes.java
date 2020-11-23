@@ -29,8 +29,7 @@ public class MenuClientes extends javax.swing.JFrame {
   ArrayList<Clientebeans> listObjForm = new ArrayList();
     Clientebeans ObjBeans = new Clientebeans();
  
-   int salvar, op = 0;
-      
+    int salvar, op = 0;   
   
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -80,11 +79,6 @@ public class MenuClientes extends javax.swing.JFrame {
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
-        miVendasavista = new javax.swing.JMenuItem();
-        miVendasaprazo = new javax.swing.JMenuItem();
-        miVendaslanches = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("MENU CLIENTES");
@@ -500,42 +494,6 @@ public class MenuClientes extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Relatorios");
-        jMenu3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-
-        jMenu4.setText("Vendas");
-
-        miVendasavista.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.ALT_MASK));
-        miVendasavista.setText("Vendas Avista");
-        miVendasavista.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miVendasavistaActionPerformed(evt);
-            }
-        });
-        jMenu4.add(miVendasavista);
-
-        miVendasaprazo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_Z, java.awt.event.InputEvent.ALT_MASK));
-        miVendasaprazo.setText("Vendas Aprazo");
-        miVendasaprazo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miVendasaprazoActionPerformed(evt);
-            }
-        });
-        jMenu4.add(miVendasaprazo);
-
-        miVendaslanches.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_L, java.awt.event.InputEvent.ALT_MASK));
-        miVendaslanches.setText("Vendas Lanches");
-        miVendaslanches.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miVendaslanchesActionPerformed(evt);
-            }
-        });
-        jMenu4.add(miVendaslanches);
-
-        jMenu3.add(jMenu4);
-
-        jMenuBar1.add(jMenu3);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -546,7 +504,7 @@ public class MenuClientes extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(1116, 718));
@@ -697,11 +655,13 @@ public class MenuClientes extends javax.swing.JFrame {
             ObjBeans.setDD(txtDD.getText().trim());
             ObjBeans.setClientePK(1);
             PessoasControl cli = new PessoasControl();
-            cli.cadastroCliente(ObjBeans);
-            desabilitados();
-            limparcampos();            
-            JOptionPane.showMessageDialog(this, "CLIENTE CADASTRADO COM EXITO !!!");
-          
+            if(cli.cadastroCliente(ObjBeans)){
+                desabilitados();
+                limparcampos();            
+                JOptionPane.showMessageDialog(this, "CLIENTE CADASTRADO COM SUCESSO !!!");
+            }else{
+                JOptionPane.showMessageDialog(this, "CLIENTE NÃO CADASTRADO !!!");
+            }
         }
   }
     
@@ -723,13 +683,17 @@ public class MenuClientes extends javax.swing.JFrame {
             ObjBeans.setDD(txtDD.getText());                  
             ObjBeans.setFone(txtContato.getText());  
             ObjBeans.setClientePK(listObjForm.get(tbClientes.getSelectedRow()).getClientePK());
-            cli.atualisarClientes(ObjBeans);
-        
-            desabilitados();
-            limparcampos();
-            JOptionPane.showMessageDialog(this, "CLIENTE ATUALISADO COM EXITO !!!");
-          }
-      }
+            
+            if(cli.atualisarClientes(ObjBeans)){
+                desabilitados();
+                limparcampos();
+                JOptionPane.showMessageDialog(this, "CLIENTE ATUALISADO COM SUCESSO !!!");
+            }else{
+                JOptionPane.showMessageDialog(this, "CLIENTE NÃO ATUALISADO !!!");
+            }
+            
+        }
+    }
      
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
         
@@ -757,12 +721,11 @@ public class MenuClientes extends javax.swing.JFrame {
             camposhabilitados();
             btNovo.setEnabled(false);
             btSalvar.setEnabled(true);           
-            }
-             else 
-                 {
-                 JOptionPane.showMessageDialog(this, "SELECIONE UM CLIENTE !!!");
-                 }
-          }
+        }
+         else{
+             JOptionPane.showMessageDialog(this, "SELECIONE UM CLIENTE !!!");
+        }
+    }
     
     
     private void btAtualisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualisarActionPerformed
@@ -771,17 +734,38 @@ public class MenuClientes extends javax.swing.JFrame {
                   op = 2;
                   salvar = 2;                
                   AlterarCliente();
-                 }
+            }
         
     }//GEN-LAST:event_btAtualisarActionPerformed
 
-    private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
+    private void excluirCliente(int codigo){
         
+        PessoasControl cliente = new PessoasControl();
+        if(cliente.excluirPessoa(codigo, 0)){
+            JOptionPane.showMessageDialog(this, "CLIENTE EXCLUIDO COM SUCESSO !!!");
+            listaCliente();
+            desabilitados();
+        }else{
+            JOptionPane.showMessageDialog(this, "CLIENTE NÃO EXCLUIDO !!!");
+        }
+    }
+    
+    private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
+         
+        if (tbClientes.getSelectedRow() != -1) {
+            
+            int resposta = JOptionPane.showConfirmDialog(this,"DESEJA EXCLUIR ESTE CLIENTE?", "Confirmação", JOptionPane.YES_NO_OPTION);  
+            if(resposta == JOptionPane.YES_OPTION){
+                excluirCliente(listObjForm.get(tbClientes.getSelectedRow()).getClientePK());
+                listaCliente();
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "SELECIONE UM CLIENTE !!!");
+        }
     }//GEN-LAST:event_btExcluirActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
-       
-        
+             
         while (tmClientes.getRowCount() > 0) {
             tmClientes.removeRow(0);
             }
@@ -826,41 +810,38 @@ public class MenuClientes extends javax.swing.JFrame {
 
                 for (int i = 0; i < clientes.size(); i++) {
 
-                      tmClientes.addRow(campos);//"Nome", "CPF", "Logradouro", "Contato"
+                      tmClientes.addRow(campos);
                       tmClientes.setValueAt(clientes.get(i).getNome(), i, 0);
                       tmClientes.setValueAt(clientes.get(i).getCPF(), i, 1);
                       tmClientes.setValueAt(clientes.get(i).getLogradouro(), i, 2);
                       tmClientes.setValueAt(clientes.get(i).getFone(), i, 3);
-                     }
-
-               }
+                }
+            }
        }     
     
   
      private void tbClientesLinhaSelecionada(JTable tb) {
-      
        
-         if (tb.getSelectedRow() != -1) {                
+        if (tb.getSelectedRow() != -1) {                
            
-                  txtNome.setText(listObjForm.get(tb.getSelectedRow()).getNome());
-                  txtCPF.setText(listObjForm.get(tb.getSelectedRow()).getCPF());
-                  txtDatanasc.setDate(listObjForm.get(tb.getSelectedRow()).getDatanasc());
-                  txtLogradouro.setText(listObjForm.get(tb.getSelectedRow()).getLogradouro());
-                  txtBairro.setText(listObjForm.get(tb.getSelectedRow()).getBairro());
-                  txtNumero.setText(listObjForm.get(tb.getSelectedRow()).getNumero());
-                  txtCidade.setText(listObjForm.get(tb.getSelectedRow()).getCidade());
-                  txtCep.setText(listObjForm.get(tb.getSelectedRow()).getCEP());
-                  txtUF.setText(listObjForm.get(tb.getSelectedRow()).getUF());
-                  txtDD.setText(listObjForm.get(tb.getSelectedRow()).getDD());
-                  txtContato.setText(listObjForm.get(tb.getSelectedRow()).getFone());                
-                
-                  desabilitados();                     
-                  } 
-                   else { 
+            txtNome.setText(listObjForm.get(tb.getSelectedRow()).getNome());
+            txtCPF.setText(listObjForm.get(tb.getSelectedRow()).getCPF());
+            txtDatanasc.setDate(listObjForm.get(tb.getSelectedRow()).getDatanasc());
+            txtLogradouro.setText(listObjForm.get(tb.getSelectedRow()).getLogradouro());
+            txtBairro.setText(listObjForm.get(tb.getSelectedRow()).getBairro());
+            txtNumero.setText(listObjForm.get(tb.getSelectedRow()).getNumero());
+            txtCidade.setText(listObjForm.get(tb.getSelectedRow()).getCidade());
+            txtCep.setText(listObjForm.get(tb.getSelectedRow()).getCEP());
+            txtUF.setText(listObjForm.get(tb.getSelectedRow()).getUF());
+            txtDD.setText(listObjForm.get(tb.getSelectedRow()).getDD());
+            txtContato.setText(listObjForm.get(tb.getSelectedRow()).getFone());                
+
+            desabilitados();                     
+        }else { 
              
-                          limparcampos();
-                         }
-      }
+            limparcampos();
+        }
+    }
   
   
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
@@ -901,25 +882,7 @@ public class MenuClientes extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem5ActionPerformed
     
     MenuRelatorios Relatorios; 
-    
-    private void miVendasavistaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVendasavistaActionPerformed
-        String args = "Relatorio de vendas Avista";
-        Relatorios.main(1 , args);
-        dispose();
-    }//GEN-LAST:event_miVendasavistaActionPerformed
-
-    private void miVendasaprazoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVendasaprazoActionPerformed
-        String args = "Relatorio de vendas Aprazo";
-        Relatorios.main(2 , args);
-        dispose();
-    }//GEN-LAST:event_miVendasaprazoActionPerformed
-
-    private void miVendaslanchesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVendaslanchesActionPerformed
-        String args ="Relatorio de vendas de Lanchas";
-        Relatorios.main(3 , args);
-        dispose();
-    }//GEN-LAST:event_miVendaslanchesActionPerformed
- 
+     
     /**
      * @param args the command line arguments
      */
@@ -985,17 +948,12 @@ public class MenuClientes extends javax.swing.JFrame {
     private javax.swing.JLayeredPane jLayeredPane2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JMenuItem miVendasaprazo;
-    private javax.swing.JMenuItem miVendasavista;
-    private javax.swing.JMenuItem miVendaslanches;
     private javax.swing.JTable tbClientes;
     private javax.swing.JTextField txtBairro;
     private javax.swing.JFormattedTextField txtCPF;

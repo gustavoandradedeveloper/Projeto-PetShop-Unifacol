@@ -27,9 +27,9 @@ public class Produtoscontrol {
   AcessoMysql mysql = new AcessoMysql();
     
   ArrayList<Produtosbeans> listProdutos;
-       
+  boolean retorno = false;    
     
-   public void cadastraProduto(Produtosbeans Produtos){
+   public boolean cadastraProduto(Produtosbeans Produtos){
     
         try {
             
@@ -39,14 +39,15 @@ public class Produtoscontrol {
                 pstm.setString(3,Produtos.getQuantidade());
                 pstm.setInt(4,Produtos.getFornecedorPK());
                 pstm.executeUpdate();
-         
-             
+                
+                retorno = true;
              } catch (Exception e) {
-                    
-                      JOptionPane.showMessageDialog(null, "PORDUTO NÃO CADASTRADO !!!");            
+                        retorno = false;
+                        JOptionPane.showMessageDialog(null, "PORDUTO NÃO CADASTRADO !!!");            
                      }
         
-            mysql.desconectar(); 
+            mysql.desconectar();
+            return retorno;
      }
     
     public ArrayList<Produtosbeans> listaProdutos(String nome){
@@ -82,23 +83,27 @@ public class Produtoscontrol {
    } 
     
     
-     public void atualisarProduto(Produtosbeans Produtos){
+    public boolean atualisarProduto(Produtosbeans Produtos){
     
-      try {
-    
-            pstm = mysql.conectar().prepareStatement(atualisaProdutos);
-            pstm.setString(1,Produtos.getDescricao());
-            pstm.setString(2,Produtos.getValor());
-            pstm.setString(3,Produtos.getQuantidade());
-            pstm.setInt(4,Produtos.getFornecedorPK());
-            pstm.setInt(5,Produtos.getCodigo());         
-            pstm.executeUpdate();
-        } catch (Exception e) {
-                 e.printStackTrace(); 
-               
-        }
+        try {
+
+              pstm = mysql.conectar().prepareStatement(atualisaProdutos);
+              pstm.setString(1,Produtos.getDescricao());
+              pstm.setString(2,Produtos.getValor());
+              pstm.setString(3,Produtos.getQuantidade());
+              pstm.setInt(4,Produtos.getFornecedorPK());
+              pstm.setInt(5,Produtos.getCodigo());         
+              pstm.executeUpdate();
+              retorno = true;
+          } catch (Exception e) {
+                  retorno = false;
+                   e.printStackTrace(); 
+
+          }
+      
         mysql.desconectar();
-  }
+        return retorno;
+    }
      
    public void excluirProduto(Produtosbeans Produtos) {
 

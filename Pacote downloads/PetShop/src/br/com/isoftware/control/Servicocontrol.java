@@ -27,7 +27,7 @@ public class Servicocontrol {
   String consultarServicos = "SELECT SERVICOS.`COD_SERVICO` AS CODIGO, SERVICOS.`NOME_SERVICO` AS SERVICO, SERVICOS.`PRECO_SERVICO` AS PRECO, SERVICOS.`DATASERVICO` AS DATASERVICO, SERVICOS.`ANIMAL_SERVICO` AS ANIMALPK, SERVICOS.`FUNCIONARIO_SERVICO` AS FUNCIONARIOPK, FUNCIONARIOS.`NOME_FUNCIONARIO` AS FUNCIONARIO, ANIMAIS.`NOME_ANIMAL` AS ANIMAL FROM  `FUNCIONARIOS` FUNCIONARIOS INNER JOIN `SERVICOS` SERVICOS ON FUNCIONARIOS.`COD_FUNCIONARIO` = SERVICOS.`FUNCIONARIO_SERVICO` INNER JOIN `ANIMAIS` ANIMAIS ON SERVICOS.`ANIMAL_SERVICO` = ANIMAIS.`COD_ANIMAL` WHERE NOME_ANIMAL LIKE ?";
   String cadastraServico = "INSERT INTO SERVICOS(NOME_SERVICO, PRECO_SERVICO, DATASERVICO, ANIMAL_SERVICO, FUNCIONARIO_SERVICO)VALUES(?,?,?,?,?)";
   String atualisaServico = "UPDATE SERVICOS SET NOME_SERVICO = ?, PRECO_SERVICO = ?, DATASERVICO = ?, ANIMAL_SERVICO = ?, FUNCIONARIO_SERVICO = ? WHERE COD_SERVICO = ?"; 
-  String excluirProdutos = "DELETE FROM SERVICOS WHERE COD_PRODUTO = ?";
+  String excluirServico = "DELETE FROM SERVICOS WHERE COD_SERVICO = ?";
     
   AcessoMysql mysql = new AcessoMysql();
     
@@ -103,18 +103,17 @@ public class Servicocontrol {
         return retorno;
   }
      
-   public void excluirProduto(Produtosbeans Produtos) {
-
-    try {   
-
-            pstm = (com.mysql.jdbc.PreparedStatement) mysql.conectar().prepareStatement(excluirProdutos);
-            pstm.setInt(1, Produtos.getCodigo());           
+   public boolean excluirProduto(int codigo) {
+    try {
+            pstm = (com.mysql.jdbc.PreparedStatement) mysql.conectar().prepareStatement(excluirServico);
+            pstm.setInt(1, codigo);           
             pstm.executeUpdate();           
             mysql.desconectar();
-
+            retorno = true;
         } catch (SQLException e) {
-                 e.printStackTrace();
-                 }
-
+                    retorno = false;
+                    e.printStackTrace();
+                }
+        return retorno;
     }
 }

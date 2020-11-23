@@ -5,7 +5,6 @@
 package br.com.isoftware.Interface;
 
 import br.com.isoftware.Calendario.calendario;
-import br.com.isoftware.beans.Pessoasbeans;
 import br.com.isoftware.beans.Funcionariobeans;
 import br.com.isoftware.control.PessoasControl;
 import java.io.IOException;
@@ -693,7 +692,7 @@ public class MenuFuncionarios extends javax.swing.JFrame {
     }//GEN-LAST:event_ATcadasProdutosActionPerformed
 
     private void btPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPesquisarActionPerformed
-        listaCliente();
+        listaFuncionario();
     }//GEN-LAST:event_btPesquisarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
@@ -715,8 +714,29 @@ public class MenuFuncionarios extends javax.swing.JFrame {
         desabilitados();
     }//GEN-LAST:event_btCancelarActionPerformed
 
+     private void excluirFuncionario(int codigo){
+        
+        PessoasControl cliente = new PessoasControl();
+        if(cliente.excluirPessoa(codigo, 1)){
+            JOptionPane.showMessageDialog(this, "FUNCIONÁRIO EXCLUIDO COM SUCESSO !!!");
+            listaFuncionario();
+            desabilitados();
+        }else{
+            JOptionPane.showMessageDialog(this, "FUNCIONÁRIO NÃO EXCLUIDO !!!");
+        }
+    }
+    
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
+    
+        if (tbFuncionarios.getSelectedRow() != -1) {
 
+            int resposta = JOptionPane.showConfirmDialog(this,"DESEJA EXCLUIR ESTE FUNCIONÁRIO?", "Confirmação", JOptionPane.YES_NO_OPTION);  
+            if(resposta == JOptionPane.YES_OPTION){
+                excluirFuncionario(listObjForm.get(tbFuncionarios.getSelectedRow()).getFuncionarioPK());
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "SELECIONE UM FUNCIONÁRIO !!!");
+        }
     }//GEN-LAST:event_btExcluirActionPerformed
 
     private void btAtualisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualisarActionPerformed
@@ -742,7 +762,7 @@ public class MenuFuncionarios extends javax.swing.JFrame {
         else if (salvar == 2) {
 
             atualisarFuncionarios();
-            listaCliente();
+            listaFuncionario();
             limparcampos();
             op = 0;
         }
@@ -761,7 +781,7 @@ public class MenuFuncionarios extends javax.swing.JFrame {
             btSalvar.setEnabled(true);
             btPesquisar.setEnabled(false);
             tbFuncionarios.setEnabled(false);
-            novoCliente();
+            novoFuncionario();
         }
     }//GEN-LAST:event_btNovoActionPerformed
 
@@ -823,7 +843,7 @@ public class MenuFuncionarios extends javax.swing.JFrame {
     }//GEN-LAST:event_miVendaslanchesActionPerformed
     
     MenuRelatorios Relatorios; 
-     private void novoCliente() {
+     private void novoFuncionario() {
               camposhabilitados();
               }
     
@@ -862,13 +882,13 @@ public class MenuFuncionarios extends javax.swing.JFrame {
             desabilitados();
             limparcampos();
             
-            JOptionPane.showMessageDialog(this, "FUNCIONARIO CADASTRADO COM EXITO !!!");
+            JOptionPane.showMessageDialog(this, "FUNCIONÁRIO CADASTRADO SUCESSO !!!");
            }
         
     }
     
     
-      private void atualisarFuncionarios(){
+    private void atualisarFuncionarios(){
 
         if (testarcampos()){          
             
@@ -887,31 +907,33 @@ public class MenuFuncionarios extends javax.swing.JFrame {
             ObjBeans.setSalario(txtSalario.getText());
             ObjBeans.setDD(txtDD.getText());                  
             ObjBeans.setFone(txtContato.getText());
-            ObjBeans.setFuncionarioPK(listObjForm.get(tbFuncionarios.getSelectedRow()).getFuncionarioPK());
+            ObjBeans.setFuncionarioPK(listObjForm.get(tbFuncionarios.getSelectedRow()).getFuncionarioPK());                        
             
-            func.atualisarFuncionario(ObjBeans);
-           
-            desabilitados();
-            limparcampos();
-            JOptionPane.showMessageDialog(this, "FUNCIONARIO ATUALISADO COM EXITO !!!");
-          }
-      }
+            if(func.atualisarFuncionario(ObjBeans)){
+                desabilitados();
+                limparcampos();
+                JOptionPane.showMessageDialog(this, "FUNCIONÁRIO ATUALISADO SUCESSO !!!");
+            }else{
+                JOptionPane.showMessageDialog(this, "FUNCIONÁRIO NÃO ATUALISADO !!!");
+            }
+        }
+    }
      
-     private void AlterarFuncionario() {
+    private void AlterarFuncionario() {
 
         if (tbFuncionarios.getSelectedRow() != -1) {
             camposhabilitados();
             btNovo.setEnabled(false);
-            btSalvar.setEnabled(true);           
-            }
-             else 
-                 {
-                 JOptionPane.showMessageDialog(this, "SELECIONE UM FUNCIONARIO !!!");
-                 }
-          }
+            btSalvar.setEnabled(true);
+            btExcluir.setEnabled(false);
+        }
+         else{
+            JOptionPane.showMessageDialog(this, "SELECIONE UM FUNCIONÁRIO !!!");
+        }
+    }
     
     
- private void listaCliente() {
+ private void listaFuncionario() {
 
         PessoasControl   funci = new PessoasControl();
 
@@ -932,7 +954,7 @@ public class MenuFuncionarios extends javax.swing.JFrame {
         if (Funcionario.size() == 0) {
             
             txtPesquisar.setText("");
-            JOptionPane.showMessageDialog(null, "NENHUM FUNCIONARIO ENCONTRADO !!!");
+            JOptionPane.showMessageDialog(null, "NENHUM FUNCIONÁRIO ENCONTRADO !!!");
            }
            else {
 
@@ -947,37 +969,31 @@ public class MenuFuncionarios extends javax.swing.JFrame {
 
                }
        }     
-    
-  
-     private void tbFuncionarioLinhaSelecionada(JTable tb) {
       
-       
+     private void tbFuncionarioLinhaSelecionada(JTable tb) {
+             
          if (tb.getSelectedRow() != -1) {                
            
-                  txtNome.setText(listObjForm.get(tb.getSelectedRow()).getNome());
-                  txtFuncao.setText(listObjForm.get(tb.getSelectedRow()).getFuncao());
-                  txtCPF.setText(listObjForm.get(tb.getSelectedRow()).getCPF());
-                  txtDatanasc.setDate(listObjForm.get(tb.getSelectedRow()).getDatanasc());
-                  txtLogradouro.setText(listObjForm.get(tb.getSelectedRow()).getLogradouro());
-                  txtBairro.setText(listObjForm.get(tb.getSelectedRow()).getBairro());
-                  txtNumero.setText(listObjForm.get(tb.getSelectedRow()).getNumero());
-                  txtCidade.setText(listObjForm.get(tb.getSelectedRow()).getCidade());
-                  txtCep.setText(listObjForm.get(tb.getSelectedRow()).getCEP());
-                  txtUF.setText(listObjForm.get(tb.getSelectedRow()).getUF());
-                  txtSalario.setText(listObjForm.get(tb.getSelectedRow()).getSalario());
-                  txtDD.setText(listObjForm.get(tb.getSelectedRow()).getDD());
-                  txtContato.setText(listObjForm.get(tb.getSelectedRow()).getFone());              
-                
-                  desabilitados();                     
-                  } 
-                   else { 
-             
-                          limparcampos();
-                         }
-        
-          
-      
-      }
+            txtNome.setText(listObjForm.get(tb.getSelectedRow()).getNome());
+            txtFuncao.setText(listObjForm.get(tb.getSelectedRow()).getFuncao());
+            txtCPF.setText(listObjForm.get(tb.getSelectedRow()).getCPF());
+            txtDatanasc.setDate(listObjForm.get(tb.getSelectedRow()).getDatanasc());
+            txtLogradouro.setText(listObjForm.get(tb.getSelectedRow()).getLogradouro());
+            txtBairro.setText(listObjForm.get(tb.getSelectedRow()).getBairro());
+            txtNumero.setText(listObjForm.get(tb.getSelectedRow()).getNumero());
+            txtCidade.setText(listObjForm.get(tb.getSelectedRow()).getCidade());
+            txtCep.setText(listObjForm.get(tb.getSelectedRow()).getCEP());
+            txtUF.setText(listObjForm.get(tb.getSelectedRow()).getUF());
+            txtSalario.setText(listObjForm.get(tb.getSelectedRow()).getSalario());
+            txtDD.setText(listObjForm.get(tb.getSelectedRow()).getDD());
+            txtContato.setText(listObjForm.get(tb.getSelectedRow()).getFone());              
+
+            desabilitados();                     
+        }else { 
+
+                limparcampos();
+        }
+    }
   
   
     /**

@@ -381,7 +381,7 @@
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/br/com/isoftware/Imagens/Novoprod_1.png"/>
+              <Image iconType="3" name="/br/com/isoftware/Imagens/adicionar.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Incluir"/>
           </Properties>
@@ -409,7 +409,7 @@
               <Font name="Tahoma" size="14" style="0"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/br/com/isoftware/Imagens/Salvarprod_1.png"/>
+              <Image iconType="3" name="/br/com/isoftware/Imagens/save.png"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Finalizar"/>
             <Property name="enabled" type="boolean" value="false"/>

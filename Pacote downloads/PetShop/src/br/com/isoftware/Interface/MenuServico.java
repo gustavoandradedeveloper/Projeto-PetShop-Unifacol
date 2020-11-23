@@ -22,9 +22,9 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Armando
  */
-public class MenuServoco extends javax.swing.JFrame {
+public class MenuServico extends javax.swing.JFrame {
    
-    public MenuServoco() {
+    public MenuServico() {
         initComponents();
         cbAnimais.removeAllItems();
     }
@@ -116,7 +116,7 @@ public class MenuServoco extends javax.swing.JFrame {
         });
 
         btSalvar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/Salvarprod_1.png"))); // NOI18N
+        btSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/save.png"))); // NOI18N
         btSalvar.setText("Salvar");
         btSalvar.setEnabled(false);
         btSalvar.setFocusCycleRoot(true);
@@ -427,7 +427,7 @@ public class MenuServoco extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(1116, 718));
@@ -454,7 +454,7 @@ public class MenuServoco extends javax.swing.JFrame {
     private void desabilitados() {
                 
                 txtPreco.setEditable(false);
-                txtDataservicos.setDate(null);
+                txtDataservicos.setCalendar(null);
                 cbAnimais.setEnabled(false);
                 cbFuncionaros.setEnabled(false);
                 cbServicos.setEnabled(false);
@@ -501,13 +501,13 @@ public class MenuServoco extends javax.swing.JFrame {
     
     }
       
-     MenuServoco Produtos;    
+     MenuServico Produtos;    
  
       private void visualisaProdutos(){
     
          if(Produtos == null){
          
-            Produtos = new MenuServoco();
+            Produtos = new MenuServico();
             Produtos.setVisible(true);         
             }
          else{
@@ -593,6 +593,7 @@ public class MenuServoco extends javax.swing.JFrame {
         op = 0;
         btAtualisar.setEnabled(true);
         btNovo.setEnabled(true);
+        btExcluir.setEnabled(true);
         btPesquisar.setEnabled(true);
         txtPesquisar.setEditable(true);
         tbServicos.setEnabled(true);
@@ -601,17 +602,40 @@ public class MenuServoco extends javax.swing.JFrame {
         cbFuncionaros.removeAllItems();
         desabilitados();
     }//GEN-LAST:event_btCancelarActionPerformed
-
+    
+    private void excluirServicos(int codigo){
+        Servicocontrol servico = new Servicocontrol();
+        if(servico.excluirProduto(codigo)){
+            JOptionPane.showMessageDialog(this, "SERVIÇO EXCLUIDO COM SUCESSO !!!");
+            listarServicos();
+        }else{
+            JOptionPane.showMessageDialog(this, "SERVIÇO NÃO EXCLUIDO !!!");
+        }
+    }
+    
     private void btExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcluirActionPerformed
-
+        
+        if (tbServicos.getSelectedRow() != -1) {
+            
+            int resposta = JOptionPane.showConfirmDialog(this,"DESEJA EXCLUIR ESTE SERVIÇO?", "Confirmação", JOptionPane.YES_NO_OPTION);  
+            if(resposta == JOptionPane.YES_OPTION){
+                excluirServicos(listObjServicos.get(tbServicos.getSelectedRow()).getCodigo());
+            }
+        }else{
+            JOptionPane.showMessageDialog(this, "SELECIONE UM SERVIÇO !!!");
+        }
     }//GEN-LAST:event_btExcluirActionPerformed
 
     private void btAtualisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAtualisarActionPerformed
-
-        if (op == 0 || op == 2) {
-            op = 2;
-            salvar = 2;
-            AlterarProduto();
+        
+        if (tbServicos.getSelectedRow() != -1) {
+            if (op == 0 || op == 2) {
+                op = 2;
+                salvar = 2;
+                AlterarProduto();
+            }     
+        }else{
+            JOptionPane.showMessageDialog(this, "SELECIONE UM SERVIÇO !!!");
         }
     }//GEN-LAST:event_btAtualisarActionPerformed
 
@@ -620,21 +644,12 @@ public class MenuServoco extends javax.swing.JFrame {
         if(testarcampos()){     
             if (salvar == 1) {
 
-                    //cadastraServicos();
-                    op = 0;
-                    txtPesquisar.setEditable(true);
-                    btPesquisar.setEnabled(true);
-                    tbServicos.setEnabled(true);
-                    desabilitados();
-
+                cadastraServicos();               
             }
             else if (salvar == 2) {
-
-                atualisarProduto();
-                listarServicos();
-                limparcampos();
-                op = 0;
-            }
+                
+                atualisarProduto();               
+            }            
         }
     }//GEN-LAST:event_btSalvarActionPerformed
 
@@ -646,74 +661,81 @@ public class MenuServoco extends javax.swing.JFrame {
         if (op == 0 || op == 1) {
             op = 1;
             salvar = 1;
-
-            btAtualisar.setEnabled(false);
-            btSalvar.setEnabled(true);
-            btPesquisar.setEnabled(false);
-            tbServicos.setEnabled(false);
             novoProduto();
         }
     }//GEN-LAST:event_btNovoActionPerformed
     
     MenuRelatorios Relatorios; 
-     private void novoProduto() {
-              carregaCBs();
-              cbAnimais.setSelectedIndex(0);
-              cbFuncionaros.setSelectedIndex(0);
-              camposhabilitados();
-        }
+    private void novoProduto() {
+        carregaCBs();
+        btAtualisar.setEnabled(false);
+        btSalvar.setEnabled(true);
+        btExcluir.setEnabled(false);
+        btPesquisar.setEnabled(false);
+        tbServicos.setEnabled(false);
+        cbAnimais.setSelectedIndex(0);
+        cbFuncionaros.setSelectedIndex(0);
+        camposhabilitados();
+    }
     
-      private boolean testarcampos() {
+    private boolean testarcampos() {
 
-            if (testaValor(txtPreco.getText().trim())){
-                return true;
-            }
-            JOptionPane.showMessageDialog(this, "OBSERVE SE OS CAMPOS FORAM PREENCHIDOS CORRETAMENTE !!!");
-            return false;
-       }
+        if (testaValor(txtPreco.getText().trim())){
+            return true;
+        }
+        JOptionPane.showMessageDialog(this, "OBSERVE SE OS CAMPOS FORAM PREENCHIDOS CORRETAMENTE !!!");
+        return false;
+    }
     
-     private void cadastraServicos(){
+    private void cadastraServicos(){
             
-            ObjBeans = new Servicosbeans();
-            Servicocontrol servicocontrol = new Servicocontrol();
-            
-            String[] servico = new String[]{"Banho", "Tosa"};
-            ObjBeans.setServico(servico[cbServicos.getSelectedIndex()]);          
-            ObjBeans.setPreco(txtPreco.getText().trim());
-            ObjBeans.setDataservico(txtDataservicos.getDate());
-            ObjBeans.setAnimalPK(listObjAnimal.get(cbAnimais.getSelectedIndex()).getCodigo());
-            ObjBeans.setFuncionarioPK(listObjFuncionarios.get(cbFuncionaros.getSelectedIndex()).getFuncionarioPK());
-            if(servicocontrol.cadastraServico(ObjBeans)){
-                JOptionPane.showMessageDialog(this, "SERVIÇO CADASTRADO COM EXITO !!!");
-                desabilitados();
-                limparcampos();
-            }else{
-                
-                JOptionPane.showMessageDialog(null, "SERVIÇO NÃO CADASTRADO !!!");  
-            }
+        ObjBeans = new Servicosbeans();
+        Servicocontrol servicocontrol = new Servicocontrol();
+
+        String[] servico = new String[]{"Banho", "Tosa"};
+        ObjBeans.setServico(servico[cbServicos.getSelectedIndex()]);          
+        ObjBeans.setPreco(txtPreco.getText().trim());
+        ObjBeans.setDataservico(txtDataservicos.getDate());
+        ObjBeans.setAnimalPK(listObjAnimal.get(cbAnimais.getSelectedIndex()).getCodigo());
+        ObjBeans.setFuncionarioPK(listObjFuncionarios.get(cbFuncionaros.getSelectedIndex()).getFuncionarioPK());
+        if(servicocontrol.cadastraServico(ObjBeans)){
+            op = 0;
+            txtPesquisar.setEditable(true);
+            btPesquisar.setEnabled(true);
+            tbServicos.setEnabled(true);
+            desabilitados();
+            limparcampos();
+            JOptionPane.showMessageDialog(this, "SERVIÇO CADASTRADO COM EXITO !!!");
+        }else{
+
+            JOptionPane.showMessageDialog(null, "SERVIÇO NÃO CADASTRADO !!!");  
+        }
     }
     
     
-      private void atualisarProduto(){
-      
-            Servicocontrol servicocontrol = new Servicocontrol();
-            String[] servico = new String[]{"Banho", "Tosa"};
-                        
-            ObjBeans.setPreco(txtPreco.getText());
-            ObjBeans.setDataservico(txtDataservicos.getDate());            
-            ObjBeans.setServico(servico[cbServicos.getSelectedIndex()]);
-            ObjBeans.setFuncionarioPK(listObjServicos.get(cbFuncionaros.getSelectedIndex()).getFuncionarioPK());
-            ObjBeans.setAnimalPK(listObjServicos.get(cbAnimais.getSelectedIndex()).getAnimalPK());
-            ObjBeans.setCodigo(listObjServicos.get(tbServicos.getSelectedRow()).getCodigo());
+    private void atualisarProduto(){
+
+        Servicocontrol servicocontrol = new Servicocontrol();
+        String[] servico = new String[]{"Banho", "Tosa"};
+
+        ObjBeans.setPreco(txtPreco.getText());
+        ObjBeans.setDataservico(txtDataservicos.getDate());            
+        ObjBeans.setServico(servico[cbServicos.getSelectedIndex()]);
+        ObjBeans.setFuncionarioPK(listObjServicos.get(cbFuncionaros.getSelectedIndex()).getFuncionarioPK());
+        ObjBeans.setAnimalPK(listObjServicos.get(cbAnimais.getSelectedIndex()).getAnimalPK());
+        ObjBeans.setCodigo(listObjServicos.get(tbServicos.getSelectedRow()).getCodigo());
+
+        if(servicocontrol.atualisaServico(ObjBeans)){
             
-            if(servicocontrol.atualisaServico(ObjBeans)){
-                JOptionPane.showMessageDialog(this, "SERVIÇO ATUALIZADO COM EXITO !!!");
-                desabilitados();
-                limparcampos();
-             }else{
-                JOptionPane.showMessageDialog(null, "SERVIÇO NÃO ATUALIZADO !!!");  
-             }
-      }
+            op = 0;
+            listarServicos();
+            limparcampos();
+            desabilitados();
+            JOptionPane.showMessageDialog(this, "SERVIÇO ATUALIZADO COM EXITO !!!");
+        }else{
+            JOptionPane.showMessageDialog(null, "SERVIÇO NÃO ATUALIZADO !!!");  
+        }
+    }
      
      private void AlterarProduto() {
 
@@ -721,24 +743,23 @@ public class MenuServoco extends javax.swing.JFrame {
                 camposhabilitados();
                 btNovo.setEnabled(false);
                 tbServicos.setEnabled(false);
+                btExcluir.setEnabled(false);
                 btSalvar.setEnabled(true);           
+            }else{
+                JOptionPane.showMessageDialog(this, "SELECIONE UM SERVIÇO !!!");
             }
-             else 
-                 {
-                 JOptionPane.showMessageDialog(this, "SELECIONE UM FUNCIONARIO !!!");
-                 }
-          }    
+        }    
     
- private void listarServicos() {
+    private void listarServicos() {
 
-            Servicocontrol servicos = new Servicocontrol();
+           Servicocontrol servicos = new Servicocontrol();
 
-            listObjServicos = servicos.listaServicos("%" + txtPesquisar.getText().trim() + "%");
-            carregaCBs();
-            visualizarServicos(listObjServicos);
-        }
+           listObjServicos = servicos.listaServicos("%" + txtPesquisar.getText().trim() + "%");
+           carregaCBs();
+           visualizarServicos(listObjServicos);
+       }
        
-  private void visualizarServicos(ArrayList<Servicosbeans > servicos) {
+    private void visualizarServicos(ArrayList<Servicosbeans > servicos) {
 
         while (tmAnimal.getRowCount() > 0) {
                 tmAnimal.removeRow(0);
@@ -750,22 +771,20 @@ public class MenuServoco extends javax.swing.JFrame {
             
                 txtPesquisar.setText("");
                 JOptionPane.showMessageDialog(null, "NENHUM SERVIÇO ENCONTRADO!!!");
-           }
-           else {
+        }else{
 
-                for (int i = 0; i < servicos.size(); i++) {
+             for (int i = 0; i < servicos.size(); i++) {
 
-                        tmAnimal.addRow(campos);
-                        tmAnimal.setValueAt(servicos.get(i).getServico(), i, 0);
-                        tmAnimal.setValueAt(servicos.get(i).getPreco(), i, 1);
-                        tmAnimal.setValueAt(servicos.get(i).getFuncionario(), i, 2);
-                        tmAnimal.setValueAt(servicos.get(i).getAnimal(), i, 3);
-                    }
-
-               }
-       }     
+                tmAnimal.addRow(campos);
+                tmAnimal.setValueAt(servicos.get(i).getServico(), i, 0);
+                tmAnimal.setValueAt(servicos.get(i).getPreco(), i, 1);
+                tmAnimal.setValueAt(servicos.get(i).getFuncionario(), i, 2);
+                tmAnimal.setValueAt(servicos.get(i).getAnimal(), i, 3);
+            }
+        }
+    }     
       
-     private void tbFuncionarioLinhaSelecionada(JTable tb) {      
+    private void tbFuncionarioLinhaSelecionada(JTable tb) {      
        
         if (tb.getSelectedRow() != -1) {
              
@@ -775,13 +794,11 @@ public class MenuServoco extends javax.swing.JFrame {
             cbAnimais.setSelectedIndex(retornaAnimal(listObjServicos.get(tb.getSelectedRow()).getAnimal()));
             cbFuncionaros.setSelectedIndex(retornaFuncionario(listObjServicos.get(tb.getSelectedRow()).getFuncionario()));
             cbServicos.setSelectedIndex(servico); 
-        } 
-         else{ 
-
-                limparcampos();
-            }
-      }
-  private int retornaAnimal(String animal){
+        }else{
+            limparcampos();
+        }
+    }
+    private int retornaAnimal(String animal){
       
         for (int i= 0; i < listObjAnimal.size(); i++ ) {
             if(listObjAnimal.get(i).getNome().equals(animal)){              
@@ -789,8 +806,8 @@ public class MenuServoco extends javax.swing.JFrame {
             }
         }
         return 0;
-  }
-  private int retornaFuncionario(String Funcionario){
+    }
+    private int retornaFuncionario(String Funcionario){
       
         for (int i = 0; i < listObjFuncionarios.size(); i++ ) {
             if(listObjFuncionarios.get(i).getNome().equals(Funcionario)){              
@@ -798,8 +815,8 @@ public class MenuServoco extends javax.swing.JFrame {
             }
         }
         return 0;
-  }
-  boolean testaValor(String digitos){
+    }
+    private boolean testaValor(String digitos){
    
        if(!digitos.equals("")){
          
@@ -810,32 +827,32 @@ public class MenuServoco extends javax.swing.JFrame {
       
                  char valor  =  digitos.charAt(i);  
                  
-                 if(valor == '0' ||valor == '1' || valor == '2' || valor == '3' || valor == '4' || valor == '5' || valor == '6' || valor == '7' || valor == '8' || valor == '9'){            
+                 if(valor == '0' ||valor == '1' || valor == '2' || valor == '3' || valor == '4' || valor == '5' || valor == '6' || valor == '7' || valor == '8' || valor == '9' || valor == ','){            
                     }else{                          
                            caracteres = caracteres + valor;
                            retono = 1; 
                           }
                 }      
-                 if(retono == 0){
-                      return true;
-                     }else{
-                             if(caracteres.length()<= 1){
-                                    for (int i = 0; i < caracteres.length(); i++){
-                                         digitos = digitos.replace(String.valueOf(caracteres.charAt(i)), "");
-                                 }
-                                    JOptionPane.showMessageDialog(null, "O CARACTER DIGITADO -> "+caracteres+" <- NÃO É PERMITIDO !!!");
-                                }else {
-                                           txtPreco.setText(digitos.replace(caracteres, ""));
-                                           System.out.println(digitos.replace(caracteres, ""));
-                                           JOptionPane.showMessageDialog(null, "OS CARACTERES DIGITADOS  -> "+caracteres+" <- NÃO SÃO PERMITIDO !!!");
-                                       }
-                            
-                             return false;
-                            }
+                if(retono == 0){
+                    return true;
+                }else{
+                    if(caracteres.length()<= 1){
+                        for (int i = 0; i < caracteres.length(); i++){
+                            digitos = digitos.replace(String.valueOf(caracteres.charAt(i)), "");
+                        }
+                        JOptionPane.showMessageDialog(null, "O CARACTER DIGITADO -> "+caracteres+" <- NÃO É PERMITIDO !!!");
+                    }else {
+
+                        digitos = digitos.replace(caracteres, "");
+                        JOptionPane.showMessageDialog(null, "OS CARACTERES DIGITADOS  -> "+caracteres+" <- NÃO SÃO PERMITIDO !!!");
+                    }
+                    txtPreco.setText(digitos);
+                    return false;
+                }
        }else {
-                 JOptionPane.showMessageDialog(null, "O CAMPO VALOR PAGO ESTA VAZIO !!!");
-                 return false;                 
-               }
+            JOptionPane.showMessageDialog(null, "O CAMPO VALOR PAGO ESTA VAZIO !!!");
+            return false;                 
+       }
   }
   
     /**
@@ -855,14 +872,46 @@ public class MenuServoco extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MenuServoco.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuServico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MenuServoco.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuServico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MenuServoco.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuServico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MenuServoco.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(MenuServico.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -899,7 +948,7 @@ public class MenuServoco extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MenuServoco().setVisible(true);
+                new MenuServico().setVisible(true);
             }
         });
         

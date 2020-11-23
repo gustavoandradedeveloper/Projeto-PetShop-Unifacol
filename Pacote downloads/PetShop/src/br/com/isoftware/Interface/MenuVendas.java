@@ -122,7 +122,7 @@ public class MenuVendas extends javax.swing.JFrame {
         jLabel2.setBounds(10, 0, 750, 44);
 
         btIncluir.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/Novoprod_1.png"))); // NOI18N
+        btIncluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/adicionar.png"))); // NOI18N
         btIncluir.setText("Incluir");
         btIncluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,7 +140,7 @@ public class MenuVendas extends javax.swing.JFrame {
         });
 
         btFinalizar.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        btFinalizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/Salvarprod_1.png"))); // NOI18N
+        btFinalizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/isoftware/Imagens/save.png"))); // NOI18N
         btFinalizar.setText("Finalizar");
         btFinalizar.setEnabled(false);
         btFinalizar.addActionListener(new java.awt.event.ActionListener() {
@@ -706,8 +706,7 @@ public class MenuVendas extends javax.swing.JFrame {
                  JOptionPane.showMessageDialog(null, "O CAMPO VALOR PAGO ESTA VAZIO !!!");
                  return false;                 
                }
-  
-  }       
+    }       
     
     private void btFinalizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFinalizarActionPerformed
      

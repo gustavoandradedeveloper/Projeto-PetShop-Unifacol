@@ -186,7 +186,7 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jPanel1" alignment="0" pref="652" max="32767" attributes="0"/>
+          <Component id="jPanel1" alignment="0" pref="653" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -414,7 +414,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JTable" name="tbFuncionarios">
+            <Component class="javax.swing.JTable" name="tbFornecedores">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="99" green="99" red="99" type="rgb"/>
@@ -434,7 +434,7 @@
                 </Property>
               </Properties>
               <AuxValues>
-                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="  tbFuncionarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);&#xa;        lsmClientes = tbFuncionarios .getSelectionModel();&#xa;        lsmClientes.addListSelectionListener(new ListSelectionListener() {&#xa;&#xa;            public void valueChanged(ListSelectionEvent e) {&#xa;&#xa;                if(! e.getValueIsAdjusting() ){&#xa;                     &#xa;                   &#xa;                          tbFuncionarioLinhaSelecionada(tbFuncionarios);&#xa;                        &#xa;                               &#xa;                  &#xa;                       &#xa;                }    &#xa;            }&#xa;        });"/>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="  tbFornecedores.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);&#xa;        lsmClientes = tbFornecedores .getSelectionModel();&#xa;        lsmClientes.addListSelectionListener(new ListSelectionListener() {&#xa;&#xa;            public void valueChanged(ListSelectionEvent e) {&#xa;&#xa;                if(! e.getValueIsAdjusting() ){&#xa;                     &#xa;                   &#xa;                          tbFuncionarioLinhaSelecionada(tbFornecedores);&#xa;                        &#xa;                               &#xa;                  &#xa;                       &#xa;                }    &#xa;            }&#xa;        });"/>
                 <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="MenuClientes_tbClientes"/>
               </AuxValues>
             </Component>

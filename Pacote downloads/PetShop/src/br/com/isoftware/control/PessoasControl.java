@@ -1,6 +1,4 @@
 package br.com.isoftware.control;
-
-
 import br.com.isoftware.AcessoBD.AcessoMysql;
 import br.com.isoftware.beans.Pessoasbeans;
 import br.com.isoftware.beans.Clientebeans;
@@ -13,18 +11,19 @@ import java.util.ArrayList;
 
 
   public class PessoasControl {
-    
+  boolean resposta = false;
+  
   PreparedStatement pstm; 
   ResultSet rs; 
  
-  String cadastraCliente = "INSERT INTO CLIENTES(NOME_CLIENTE, CPF_CLIENTE, DATANASC, RUA_CLIENTE, NUMERO_CLIENTE, BAIRRO_CLIENTE, CIDADE_CLIENTE, CEP_CLIENTE, ESTADO_CLIENTE, DD_CLIENTE, TELEFONE_CLIENTE)VALUES(?,?,?,?,?,?,?,?,?,?,?)";
-  String cadastraFuncionarios = "INSERT INTO FUNCIONARIOS(NOME_FUNCIONARIO, FUNCAO_FUNCIONARIO, CPF_FUNCIONARIO, DATANASC, RUA_FUNCIONARIO, NUMERO_FUNCIONARIO, BAIRRO_FUNCIONARIO, CIDADE_FUNCIONARIO, CEP_FUNCIONARIO, ESTADO_FUNCIONARIO, SALARIO_FUNCIONARIO, DD_FUNCIONARIO, TELEFONE_FUNCIONARIO)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)";
-  String cadastraFornecedores = "INSERT INTO FORNECEDORES(CNPJ_FORNECEDOR, IE_FORNECEDOR, RAZAOSOCIAL_FORNECEDOR, RUA_FORNECEDOR, NUMERO_FORNECEDOR, BAIRRO_FORNECEDOR, CIDADE_FORNECEDOR, CEP_FORNECEDOR, ESTADO_FORNECEDOR, DD_FORNECEDOR, TELEFONE_FORNECEDOR)VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+  String cadastraCliente = "INSERT INTO CLIENTES(NOME_CLIENTE, CPF_CLIENTE, DATANASC, RUA_CLIENTE, NUMERO_CLIENTE, BAIRRO_CLIENTE, CIDADE_CLIENTE, CEP_CLIENTE, ESTADO_CLIENTE, DD_CLIENTE, TELEFONE_CLIENTE, SITUACAO)VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
+  String cadastraFuncionarios = "INSERT INTO FUNCIONARIOS(NOME_FUNCIONARIO, FUNCAO_FUNCIONARIO, CPF_FUNCIONARIO, DATANASC, RUA_FUNCIONARIO, NUMERO_FUNCIONARIO, BAIRRO_FUNCIONARIO, CIDADE_FUNCIONARIO, CEP_FUNCIONARIO, ESTADO_FUNCIONARIO, SALARIO_FUNCIONARIO, DD_FUNCIONARIO, TELEFONE_FUNCIONARIO, SITUACAO)VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+  String cadastraFornecedores = "INSERT INTO FORNECEDORES(CNPJ_FORNECEDOR, IE_FORNECEDOR, RAZAOSOCIAL_FORNECEDOR, RUA_FORNECEDOR, NUMERO_FORNECEDOR, BAIRRO_FORNECEDOR, CIDADE_FORNECEDOR, CEP_FORNECEDOR, ESTADO_FORNECEDOR, DD_FORNECEDOR, TELEFONE_FORNECEDOR, SITUACAO)VALUES(?,?,?,?,?,?,?,?,?,?,?,?)";
   
   
-  String listaFuncionarios = "SELECT * FROM FUNCIONARIOS WHERE NOME_FUNCIONARIO LIKE ?";  
-  String listaClientes = "SELECT * FROM CLIENTES WHERE NOME_CLIENTE LIKE ?";
-  String listaFornecedores = "SELECT * FROM FORNECEDORES WHERE RAZAOSOCIAL_FORNECEDOR LIKE ?";
+  String listaFuncionarios = "SELECT * FROM FUNCIONARIOS WHERE NOME_FUNCIONARIO LIKE ? AND SITUACAO = 1";  
+  String listaClientes = "SELECT * FROM CLIENTES WHERE NOME_CLIENTE LIKE ? AND SITUACAO = 1";
+  String listaFornecedores[] = new String[]{"SELECT * FROM FORNECEDORES WHERE RAZAOSOCIAL_FORNECEDOR LIKE ? AND SITUACAO = 1", "SELECT * FROM FORNECEDORES WHERE RAZAOSOCIAL_FORNECEDOR LIKE ?"};
   
   String atualisaClinte = "UPDATE CLIENTES SET NOME_CLIENTE = ?, CPF_CLIENTE = ?, DATANASC = ?, RUA_CLIENTE = ?, NUMERO_CLIENTE = ?, BAIRRO_CLIENTE = ?, CIDADE_CLIENTE = ?, CEP_CLIENTE = ?, ESTADO_CLIENTE = ?, DD_CLIENTE = ?, TELEFONE_CLIENTE = ? WHERE COD_CLIENTE = ?";  
   String atualisaFuncionaros = "UPDATE FUNCIONARIOS SET NOME_FUNCIONARIO = ?, FUNCAO_FUNCIONARIO = ?, CPF_FUNCIONARIO = ?, DATANASC = ?, RUA_FUNCIONARIO = ?, NUMERO_FUNCIONARIO = ?, BAIRRO_FUNCIONARIO = ?, CIDADE_FUNCIONARIO = ?, CEP_FUNCIONARIO = ?, ESTADO_FUNCIONARIO = ?, SALARIO_FUNCIONARIO = ?, DD_FUNCIONARIO = ?, TELEFONE_FUNCIONARIO = ? WHERE COD_FUNCIONARIO = ?"; 
@@ -36,16 +35,13 @@ import java.util.ArrayList;
                         +"tipopessoa.`Codigo` AS Codigo, telefone.`Numero` AS Numero, telefone.`Numero1` AS Numero1, telefone.`Numero2` AS Numero2, telefone.`DD` AS DD FROM"
                         +"`endereco` endereco INNER JOIN `pessoa` pessoa ON endereco.`EnderecoPK` = pessoa.`EnderecoFK` INNER JOIN `tipopessoa` tipopessoa ON pessoa.`PessoaFK` = tipopessoa.`PessoaPK`"                      
                         +"INNER JOIN `telefone` telefone ON pessoa.`TelefoneFK` = telefone.`TelefonePK` WHERE pessoa.`Nome` LIKE ?";
-                      
-  
-  
-  String excluirCliente = "DELETE FROM PESSOA WHERE CODIGO = ?"; 
-  
+ 
+  String[] excluir = new String[]{"UPDATE CLIENTES SET SITUACAO = 0 WHERE COD_CLIENTE = ?", "UPDATE FUNCIONARIOS SET SITUACAO = 0 WHERE COD_FUNCIONARIO = ?", "UPDATE FORNECEDORES SET SITUACAO = 0 WHERE COD_FORNECEDOR = ?"};
   AcessoMysql mysql = new AcessoMysql();
   
    public PessoasControl(){}
     
-      public void cadastroCliente(Pessoasbeans ObjBeans){
+      public boolean cadastroCliente(Pessoasbeans ObjBeans){
     
           try {    
                     pstm = mysql.conectar().prepareStatement(cadastraCliente);
@@ -60,12 +56,15 @@ import java.util.ArrayList;
                     pstm.setString(9,ObjBeans.getUF());
                     pstm.setString(10, ObjBeans.getDD().replace("(","").replace(")",""));
                     pstm.setString(11, ObjBeans.getFone().replace("(","").replace(")",""));
-                    
+                    pstm.setInt(12, 1);
                     pstm.executeUpdate();
+                    resposta = true;
           } 
            catch (Exception e) {
-                 e.printStackTrace();            
+                    resposta = false;
+                    e.printStackTrace();            
                 }
+          return resposta;
      }
    
         public void cadastroFuncionario(Pessoasbeans ObjBeans){
@@ -94,7 +93,7 @@ import java.util.ArrayList;
                  e.printStackTrace();            
                   }
      }
-     public void cadastroFornecedor(Fornecedorbeans ObjBeans){
+     public boolean cadastroFornecedor(Fornecedorbeans ObjBeans){
     
           try {       
                 
@@ -113,11 +112,14 @@ import java.util.ArrayList;
                 pstm.setString(11, ObjBeans.getFone().replace("(","").replace(")",""));                           
 
                 pstm.executeUpdate();
+                resposta = true;
                 mysql.desconectar();             
           } 
            catch (Exception e) {
-                 e.printStackTrace();            
+                    resposta = false;
+                    e.printStackTrace();            
                   }
+        return resposta;
      }        
 
         
@@ -152,8 +154,8 @@ import java.util.ArrayList;
                      mysql.desconectar();
         
         } catch (Exception e) {
-          e.printStackTrace();  
-          }
+            e.printStackTrace();  
+        }
           
     return listObjForm;
  } 
@@ -194,12 +196,12 @@ import java.util.ArrayList;
     return listObjForm;
  } 
   
-   public ArrayList<Fornecedorbeans> listarFornecedores(String nome){      
+   public ArrayList<Fornecedorbeans> listarFornecedores(String nome, int situacao){      
          
         ArrayList<Fornecedorbeans> listObjForm = new ArrayList();
         try {
             
-            pstm =  mysql.conectar().prepareStatement(listaFornecedores);
+            pstm =  mysql.conectar().prepareStatement(listaFornecedores[situacao]);
             pstm.setString(1, nome);
             rs = pstm.executeQuery();
             Fornecedorbeans  forn;
@@ -230,7 +232,7 @@ import java.util.ArrayList;
     return listObjForm;
  } 
    
-    public void atualisarClientes(Clientebeans ObjBeans){    
+    public boolean atualisarClientes(Clientebeans ObjBeans){    
        
         try {//UPDATE CLIENTES SET NOME_CLIENTE = ?, CPF_CLIENTE = ?, DATANASC = ?, RUA_CLIENTE = ?, NUMERO_CLIENTE = ?, BAIRRO_CLIENTE = ?, CIDADE_CLIENTE = ?, CEP_CLIENTE = ?, ESTADO_CLIENTE = ?, DD_CLIENTE = ?, TELEFONE_CLIENTE = ? WHERE COD_CLIENTE = ?          
 
@@ -248,14 +250,17 @@ import java.util.ArrayList;
                 pstm.setString(11,ObjBeans.getFone().replace("(", "").replace(")", "").replace("-",""));
                 pstm.setInt(12, ObjBeans.getClientePK());
                 pstm.executeUpdate();
+                resposta = true;
                 mysql.desconectar();
              
           }  catch (Exception e) {
+                resposta = false;
                  e.printStackTrace();            
         }
+        return resposta;
      }
    
-     public void atualisarFuncionario(Funcionariobeans ObjBeans){    
+     public boolean atualisarFuncionario(Funcionariobeans ObjBeans){    
        
         try {
 
@@ -278,11 +283,13 @@ import java.util.ArrayList;
                 mysql.desconectar();
              
           }  catch (Exception e) {
-                 e.printStackTrace();            
+                resposta = false;
+                e.printStackTrace();            
         }
+        return resposta;
      }
    
-    public void atualisarFornecedores(Fornecedorbeans ObjBeans){    
+    public boolean atualisarFornecedores(Fornecedorbeans ObjBeans){    
        
         try {
 
@@ -301,28 +308,30 @@ import java.util.ArrayList;
                 pstm.setString(11,ObjBeans.getFone().replace("(", "").replace(")", "").replace("-",""));
                 pstm.setInt(12, ObjBeans.getFornecedorPK());
                 pstm.executeUpdate();
+                resposta = true;
                 mysql.desconectar();
              
           }  catch (Exception e) {
-                 e.printStackTrace();            
+                resposta = false;
+                e.printStackTrace();            
         }
+        return resposta;
      }
     
-      public void excluirCliente(Integer codigo) {
-          
-        try {
-            
-             pstm = mysql.conectar().prepareStatement(excluirCliente);
-             pstm.setInt(1,codigo);           
+    public boolean excluirPessoa(Integer codigo, int pessoa) { 
+        
+        try {            
+             pstm = mysql.conectar().prepareStatement(excluir[pessoa]);
+             pstm.setInt(1, codigo);
              pstm.executeUpdate();           
              mysql.desconectar();
-
+             resposta = true;
             } catch (SQLException e){
-                      e.printStackTrace();
-        }
-
+                    resposta = false;
+                    e.printStackTrace();
+            }
+        return resposta;
     }
-      
 }
 
 

@@ -417,13 +417,13 @@ public class MenuPrincipal extends javax.swing.JFrame {
 
   }
     
-    MenuServoco Servicos;
+    MenuServico Servicos;
     
     private void visualisaServicos(){
 
        if(Servicos == null){
 
-          Servicos = new MenuServoco();
+          Servicos = new MenuServico();
           Servicos.setVisible(true);         
           }
        else{

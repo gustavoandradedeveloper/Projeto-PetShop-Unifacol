@@ -35,6 +35,7 @@ public class MenuProdutos extends javax.swing.JFrame {
     
    ListSelectionModel lsmClientes; 
    ArrayList<Produtosbeans> listObjForm = new ArrayList();
+   ArrayList<Fornecedorbeans> listObjFornecedor = new ArrayList();
    Produtosbeans ObjBeans = new Produtosbeans();
    int salvar, op = 0;
       
@@ -426,7 +427,6 @@ public class MenuProdutos extends javax.swing.JFrame {
                  txtQuantidade.setEditable(true);                
                  txtDescicao.setEditable(true);
                  cbFornecedores.setEnabled(true);
-                 carregaCB();
     }
 
     private void desabilitados() {
@@ -437,17 +437,17 @@ public class MenuProdutos extends javax.swing.JFrame {
                  cbFornecedores.setEnabled(false);
     }
     
-    private void carregaCB(){
+    private void carregaCB(int situacao){
     
-        if(cbFornecedores.getSelectedIndex() == -1){
+            cbFornecedores.removeAllItems();
             
             PessoasControl   forn = new PessoasControl();
 
-            ArrayList<Fornecedorbeans> listObjForm = forn.listarFornecedores("%" + txtPesquisar.getText().trim() + "%");
-            for (Fornecedorbeans listObjForm1 : listObjForm) {
+             listObjFornecedor = forn.listarFornecedores("%" + txtPesquisar.getText().trim() + "%", situacao);
+            for (Fornecedorbeans listObjForm1 : listObjFornecedor) {
                 cbFornecedores.addItem(listObjForm1.getEmpresa());
             }
-        }
+        
     }
     
    MenuClientes Clientes;  
@@ -581,29 +581,21 @@ public class MenuProdutos extends javax.swing.JFrame {
     }//GEN-LAST:event_btAtualisarActionPerformed
 
     private void btSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalvarActionPerformed
+         if(testarcampos()){ 
+            if (salvar == 1) {
+                
+                cadastraProduto();
+                op = 0;                
+            }
+            else if (salvar == 2) {
 
-        if (salvar == 1) {
-
-            cadastraProduto();
-            op = 0;
-            txtPesquisar.setEditable(true);
-            btPesquisar.setEnabled(true);
-            tbFuncionarios.setEnabled(true);
+                atualisarProduto();
+                listarProduto();
+                limparcampos();
+                op = 0;
+            }            
+            desabilitados();
         }
-        else if (salvar == 2) {
-
-            atualisarProduto();
-            listarProduto();
-            limparcampos();
-            op = 0;
-        }
-        btAtualisar.setEnabled(true);
-        btNovo.setEnabled(true);
-        btPesquisar.setEnabled(true);
-        txtPesquisar.setEditable(true);
-        tbFuncionarios.setEnabled(true);
-        btSalvar.setEnabled(false);
-        desabilitados();
     }//GEN-LAST:event_btSalvarActionPerformed
 
     private void btNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btNovoActionPerformed
@@ -625,20 +617,54 @@ public class MenuProdutos extends javax.swing.JFrame {
     
     MenuRelatorios Relatorios; 
      private void novoProduto() {
-              carregaCB();
+              carregaCB(0);
               cbFornecedores.setSelectedIndex(0);
+              btExcluir.setEnabled(false);
               camposhabilitados();
               }
     
       private boolean testarcampos() {
 
-            if (!txtDescicao.getText().trim().equals("")  && !txtValor.getText().trim().equals("") && !txtQuantidade.getText().trim().equals("")){
-                         return true;
+            if (!txtDescicao.getText().trim().equals("")  && !txtValor.getText().trim().equals("") && !txtQuantidade.getText().trim().equals("") && testaValor(txtValor.getText().trim())){
+                    return true;
               }
               JOptionPane.showMessageDialog(this, "OBSERVE SE OS CAMPOS FORAM PREENCHIDOS CORRETAMENTE !!!");
               return false;
        }
     
+      boolean testaValor(String digitos){
+   
+       if(!digitos.equals("")){
+         
+           int retono = 0,tamanho = digitos.length();
+           String caracteres="";
+       
+           for(int i = 0;i < tamanho;i ++){
+      
+                 char valor  =  digitos.charAt(i);  
+                 
+                 if(valor == '0' ||valor == '1' || valor == '2' || valor == '3' || valor == '4' || valor == '5' || valor == '6' || valor == '7' || valor == '8' || valor == '9'){            
+                    }else{                          
+                           caracteres = caracteres + valor;
+                           retono = 1; 
+                          }
+                }      
+                 if(retono == 0){
+                      return true;
+                     }else{
+                             if(caracteres.length()<= 1){
+                                  JOptionPane.showMessageDialog(null, "O CARACTER DIGITADO -> "+caracteres+" <- NÃO É PERMITIDO !!!");
+                                }else {
+                                         JOptionPane.showMessageDialog(null, "OS CARACTERES DIGITADOS  -> "+caracteres+" <- NÃO SÃO PERMITIDO !!!");
+                                       }
+                            
+                             return false;
+                            }
+       }else {
+                 JOptionPane.showMessageDialog(null, "O CAMPO VALOR PAGO ESTA VAZIO !!!");
+                 return false;                 
+               }
+    }
      private void cadastraProduto(){
 
         if ( testarcampos() ) {
@@ -650,12 +676,21 @@ public class MenuProdutos extends javax.swing.JFrame {
             ObjBeans.setValor(txtValor.getText().trim());
             ObjBeans.setQuantidade(txtQuantidade.getText().trim());
             ObjBeans.setFornecedorPK(cbFornecedores.getSelectedIndex() +1);
-            forn.cadastraProduto(ObjBeans);
-            desabilitados();
-            limparcampos();
             
-            JOptionPane.showMessageDialog(this, "FUNCIONARIO CADASTRADO COM EXITO !!!");
-           }
+            if(forn.cadastraProduto(ObjBeans)){
+                btAtualisar.setEnabled(true);
+                btNovo.setEnabled(true);
+                btPesquisar.setEnabled(true);
+                txtPesquisar.setEditable(true);
+                tbFuncionarios.setEnabled(true);
+                btSalvar.setEnabled(false);
+                desabilitados();
+                limparcampos();            
+                JOptionPane.showMessageDialog(this, "PRODUTO CADASTRADO COM SUCESSO !!!");
+            }else{
+                JOptionPane.showMessageDialog(this, "PRODUTO NÃO CADASTRADO !!!");
+            }
+        }
         
     }
     
@@ -672,15 +707,23 @@ public class MenuProdutos extends javax.swing.JFrame {
             ObjBeans.setFornecedorPK(cbFornecedores.getSelectedIndex() +1);
             ObjBeans.setCodigo(listObjForm.get(tbFuncionarios.getSelectedRow()).getCodigo());
             
-            forn.atualisarProduto(ObjBeans);
-           
-            desabilitados();
-            limparcampos();
-            JOptionPane.showMessageDialog(this, "FUNCIONARIO ATUALISADO COM EXITO !!!");
+            if(forn.atualisarProduto(ObjBeans)){
+                btAtualisar.setEnabled(true);
+                btNovo.setEnabled(true);
+                btPesquisar.setEnabled(true);
+                txtPesquisar.setEditable(true);
+                tbFuncionarios.setEnabled(true);
+                btSalvar.setEnabled(false);
+                desabilitados();
+                limparcampos();
+                JOptionPane.showMessageDialog(this, "FUNCIONARIO ATUALISADO SUCESSO !!!");
+            }else{
+                JOptionPane.showMessageDialog(this, "FUNCIONARIO NÃO ATUALISADO!!!");
+            }
         }
       }
      
-     private void AlterarProduto() {
+    private void AlterarProduto() {
 
         if (tbFuncionarios.getSelectedRow() != -1) {
                 camposhabilitados();
@@ -688,23 +731,22 @@ public class MenuProdutos extends javax.swing.JFrame {
                 tbFuncionarios.setEnabled(false);
                 btSalvar.setEnabled(true);           
             }
-             else 
-                 {
+             else{
                  JOptionPane.showMessageDialog(this, "SELECIONE UM FUNCIONARIO !!!");
-                 }
-          }    
+            }
+    }    
     
- private void listarProduto() {
+    private void listarProduto() {
 
             Produtoscontrol   forn = new Produtoscontrol();
 
             listObjForm = forn.listaProdutos("%" + txtPesquisar.getText().trim() + "%");
-            carregaCB();
+            carregaCB(1);
             visualizarProdutos(listObjForm);
 
-        }
+    }
        
-  private void visualizarProdutos(ArrayList<Produtosbeans > Produtos) {
+    private void visualizarProdutos(ArrayList<Produtosbeans > Produtos) {
 
         while (tmFuncionaros.getRowCount() > 0) {
                 tmFuncionaros.removeRow(0);
@@ -729,24 +771,33 @@ public class MenuProdutos extends javax.swing.JFrame {
                     }
 
                }
-       }     
+    }     
       
-     private void tbFuncionarioLinhaSelecionada(JTable tb) {      
+    private void tbFuncionarioLinhaSelecionada(JTable tb) {      
        
          if (tb.getSelectedRow() != -1) {
              
-                    txtDescicao.setText(listObjForm.get(tb.getSelectedRow()).getDescricao());
-                    txtValor.setText(listObjForm.get(tb.getSelectedRow()).getValor());                 
-                    txtQuantidade.setText(listObjForm.get(tb.getSelectedRow()).getQuantidade());
-                    cbFornecedores.setSelectedIndex(listObjForm.get(tb.getSelectedRow()).getFornecedorPK() -1);
-                    desabilitados();                     
-                } 
-                 else { 
+            txtDescicao.setText(listObjForm.get(tb.getSelectedRow()).getDescricao());
+            txtValor.setText(listObjForm.get(tb.getSelectedRow()).getValor());                 
+            txtQuantidade.setText(listObjForm.get(tb.getSelectedRow()).getQuantidade());
+            cbFornecedores.setSelectedIndex(retornaFornecedor(listObjForm.get(tb.getSelectedRow()).getFornecedorPK()));
+            desabilitados();                     
+        }else { 
 
-                        limparcampos();
-                       }
-      }
-  
+            limparcampos();
+        }
+   }
+  private int retornaFornecedor(int codigo){
+      
+        for (int i = 0; i < listObjFornecedor.size(); i++ ) {
+            
+            if(listObjFornecedor.get(i).getFornecedorPK() == codigo){
+                System.out.println(codigo);
+                return i;
+            }
+        }
+        return 0;
+    }
   
     /**
      * @param args the command line arguments
